@@ -15,8 +15,12 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
+
+    // TODO
+    public User(Object o, String username, String encode) {
+    }
 
     public Long getId() {
         return id;
