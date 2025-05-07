@@ -3,13 +3,34 @@ services:
   postgres:
     image: postgres:15
     restart: no
+    env_file: .env
     environment:
       POSTGRES_DB: trippal_db
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${DB_USER}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/trippal_db
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "8080:8080"
+
 volumes:
   pgdata:
