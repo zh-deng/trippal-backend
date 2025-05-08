@@ -1,37 +1,58 @@
 package com.trippal.trippal_backend.controller;
 
-import com.trippal.trippal_backend.model.User;
-import com.trippal.trippal_backend.service.UserService;
-import org.springframework.http.ResponseEntity;
+import com.trippal.trippal_backend.entity.AuthRequest;
+import com.trippal.trippal_backend.entity.UserInfo;
+import com.trippal.trippal_backend.service.JwtService;
+import com.trippal.trippal_backend.service.UserInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class UserController {
 
-    private final UserService userService;
+    private final UserInfoService service;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    // Constructor injection of the services
+    @Autowired
+    public UserController(UserInfoService service, JwtService jwtService, AuthenticationManager authenticationManager) {
+        this.service = service;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        return ResponseEntity.ok(userService.register(user));
+    @GetMapping("/welcome")
+    public String welcome() {
+        return "Welcome this endpoint is not secure";
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
-        String email = body.get("email");
-        String password = body.get("password");
+    @PostMapping("/addNewUser")
+    public String addNewUser(@RequestBody UserInfo userInfo) {
+        return service.addUser(userInfo);  // Now service will be injected properly
+    }
 
-        var userOpt = userService.login(email, password);
-        if (userOpt.isPresent()) {
-            return ResponseEntity.ok(userOpt.get());
+    @PostMapping("/generateToken")
+    public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+        );
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(authRequest.getUsername());
         } else {
-            return ResponseEntity.status(401).body(Map.of("error", "Invalid credentials"));
+            throw new UsernameNotFoundException("Invalid user request!");
         }
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @GetMapping("/user/userProfile")
+    public String userProfile() {
+        return "Welcome to user profile";
     }
 }
