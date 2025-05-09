@@ -1,7 +1,7 @@
 package com.trippal.trippal_backend.controller;
 
-import com.trippal.trippal_backend.entity.AuthRequest;
-import com.trippal.trippal_backend.entity.UserInfo;
+import com.trippal.trippal_backend.model.AuthRequest;
+import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.service.JwtService;
 import com.trippal.trippal_backend.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;

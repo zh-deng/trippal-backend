@@ -1,7 +1,7 @@
 package com.trippal.trippal_backend.repository;
 
 
-import com.trippal.trippal_backend.entity.UserInfo;
+import com.trippal.trippal_backend.model.UserInfo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

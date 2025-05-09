@@ -1,4 +1,4 @@
-package com.trippal.trippal_backend.entity;
+package com.trippal.trippal_backend.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

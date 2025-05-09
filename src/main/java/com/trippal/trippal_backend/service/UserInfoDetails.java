@@ -1,7 +1,7 @@
 package com.trippal.trippal_backend.service;
 
 
-import com.trippal.trippal_backend.entity.UserInfo;
+import com.trippal.trippal_backend.model.UserInfo;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
