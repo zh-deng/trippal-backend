@@ -28,11 +28,6 @@ public class UserController {
         this.authenticationManager = authenticationManager;
     }
 
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "Welcome this endpoint is not secure";
-    }
-
     @PostMapping("/addNewUser")
     public String addNewUser(@RequestBody UserInfo userInfo) {
         return service.addUser(userInfo);  // Now service will be injected properly
@@ -48,11 +43,5 @@ public class UserController {
         } else {
             throw new UsernameNotFoundException("Invalid user request!");
         }
-    }
-
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    @GetMapping("/user/userProfile")
-    public String userProfile() {
-        return "Welcome to user profile";
     }
 }
