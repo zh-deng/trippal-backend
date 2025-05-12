@@ -1,10 +1,9 @@
 package com.trippal.trippal_backend.service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +16,8 @@ import java.util.function.Function;
 @Component
 public class JwtService {
 
-    public static final String SECRET = "5367566859703373367639792F423F452848284D6251655468576D5A71347437";
+    @Value("${jwt.secret}")
+    private String secret;
 
     public String generateToken(String email) { // Use email as username
         Map<String, Object> claims = new HashMap<>();
@@ -34,8 +34,23 @@ public class JwtService {
                 .compact();
     }
 
+    public boolean isValidToken(String token) {
+        try {
+            // Use parserBuilder and setSigningKey to parse the token
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(secret)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();  // You can retrieve the body here if you want
+
+            return true;
+        } catch (SignatureException | ExpiredJwtException | MalformedJwtException e) {
+            return false;  // If any exception occurs, the token is invalid
+        }
+    }
+
     private Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET);
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
