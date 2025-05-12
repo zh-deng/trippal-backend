@@ -1,8 +1,11 @@
 package com.trippal.trippal_backend.service;
 
+import com.trippal.trippal_backend.dtos.UserInfoDto;
+import com.trippal.trippal_backend.exception.DuplicateUserException;
 import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.repository.UserInfoRepository;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,9 +30,18 @@ public class UserInfoService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
-    public String addUser(UserInfo userInfo) {
-        userInfo.setPassword(encoder.encode(userInfo.getPassword()));
-        repository.save(userInfo);
-        return "User Added Successfully";
+    public UserInfoDto addUser(UserInfo userInfo) {
+        try {
+            userInfo.setPassword(encoder.encode(userInfo.getPassword()));
+            UserInfo savedUser = repository.save(userInfo);
+            return new UserInfoDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail());
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicateUserException("Email or username already exists");
+        }
+    }
+
+    public UserInfo getUserByEmail(String email) {
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
     }
 }
