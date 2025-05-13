@@ -1,16 +1,22 @@
 package com.trippal.trippal_backend.service;
 
+import com.trippal.trippal_backend.dtos.TripDto;
 import com.trippal.trippal_backend.dtos.UserInfoDto;
 import com.trippal.trippal_backend.exception.DuplicateUserException;
+import com.trippal.trippal_backend.model.Trip;
 import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.repository.UserInfoRepository;
 
+import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserInfoService implements UserDetailsService {
@@ -30,11 +36,12 @@ public class UserInfoService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
-    public UserInfoDto addUser(UserInfo userInfo) {
+    public UserInfoDto createUser(UserInfo userInfo) {
         try {
             userInfo.setPassword(encoder.encode(userInfo.getPassword()));
+
             UserInfo savedUser = repository.save(userInfo);
-            return new UserInfoDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail());
+            return new UserInfoDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail(), getUserTripDtos(savedUser));
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateUserException("Email or username already exists");
         }
@@ -43,5 +50,12 @@ public class UserInfoService implements UserDetailsService {
     public UserInfo getUserByEmail(String email) {
         return repository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+    }
+
+    @Transactional
+    public List<TripDto> getUserTripDtos(UserInfo user) {
+        return user.getTrips().stream()
+                .map(trip -> new TripDto(trip.getId(), trip.getTitle(), trip.isPublic(), user.getId()))
+                .collect(Collectors.toList());
     }
 }

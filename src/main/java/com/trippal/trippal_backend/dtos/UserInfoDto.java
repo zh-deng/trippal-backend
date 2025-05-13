@@ -4,21 +4,21 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.util.List;
+
 public class UserInfoDto {
 
     private Long id;
     private String name;
     private String email;
-
-    // No-argument constructor
-    public UserInfoDto() {
-    }
+    private List<TripDto> trips;
 
     // All-argument constructor
-    public UserInfoDto(Long id, String name, String email) {
+    public UserInfoDto(Long id, String name, String email, List<TripDto> trips) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.trips = trips;
     }
 
     // Getters and Setters
@@ -44,5 +44,13 @@ public class UserInfoDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<TripDto> getTrips() {
+        return trips;
+    }
+
+    public void setTrips(List<TripDto> trips) {
+        this.trips = trips;
     }
 }
