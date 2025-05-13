@@ -28,6 +28,8 @@ public class Trip {
     @JoinColumn(name = "user_id", nullable = false)
     private UserInfo user;
 
+    public Trip() {}
+
     public Trip(String title, UserInfo user) {
         this.title = title;
         this.user = user;

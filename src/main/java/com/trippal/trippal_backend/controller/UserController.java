@@ -28,7 +28,6 @@ public class UserController {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    // Constructor injection of the services
     @Autowired
     public UserController(UserInfoService userInfoService, JwtService jwtService, AuthenticationManager authenticationManager) {
         this.userInfoService = userInfoService;
