@@ -54,11 +54,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             if (cookies != null) {
                 for (Cookie cookie : cookies) {
                     if ("jwt".equals(cookie.getName())) {
-                        token = cookie.getValue(); // Extract token from the "jwt" cookie
+                        token = cookie.getValue();
                         try {
                             username = jwtService.extractUsername(token);
 
-                            // Validate the token using the isValidToken method
                             if (!jwtService.isValidToken(token)) {
                                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired JWT token");
                                 return;

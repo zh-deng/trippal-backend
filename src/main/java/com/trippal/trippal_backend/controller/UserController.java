@@ -1,5 +1,6 @@
 package com.trippal.trippal_backend.controller;
 
+import com.trippal.trippal_backend.dtos.TripDto;
 import com.trippal.trippal_backend.dtos.UserInfoDto;
 import com.trippal.trippal_backend.model.AuthRequest;
 import com.trippal.trippal_backend.model.UserInfo;
@@ -16,25 +17,28 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/auth")
 public class UserController {
 
-    private final UserInfoService service;
+    private final UserInfoService userInfoService;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
     // Constructor injection of the services
     @Autowired
-    public UserController(UserInfoService service, JwtService jwtService, AuthenticationManager authenticationManager) {
-        this.service = service;
+    public UserController(UserInfoService userInfoService, JwtService jwtService, AuthenticationManager authenticationManager) {
+        this.userInfoService = userInfoService;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }
 
-    @PostMapping("/addNewUser")
-    public ResponseEntity<UserInfoDto> addNewUser(@RequestBody UserInfo userInfo) {
-        UserInfoDto savedUser = service.addUser(userInfo);
+    @PostMapping("/createUser")
+    public ResponseEntity<UserInfoDto> createUser(@RequestBody UserInfo userInfo) {
+        UserInfoDto savedUser = userInfoService.createUser(userInfo);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
@@ -56,8 +60,11 @@ public class UserController {
 
                 response.addCookie(cookie);
 
-                UserInfo user = service.getUserByEmail(authRequest.getUsername());
-                UserInfoDto dto = new UserInfoDto(user.getId(), user.getName(), user.getEmail());
+                UserInfo user = userInfoService.getUserByEmail(authRequest.getUsername());
+
+                List<TripDto> tripDtos = userInfoService.getUserTripDtos(user);
+
+                UserInfoDto dto = new UserInfoDto(user.getId(), user.getName(), user.getEmail(), tripDtos);
 
                 return ResponseEntity.ok(dto);
             } else {
