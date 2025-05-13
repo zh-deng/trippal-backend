@@ -11,8 +11,8 @@ public class Trip {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String name;
+    @Column(nullable = false)
+    private String title;
 
     private boolean isPublic = false;
 
@@ -28,8 +28,8 @@ public class Trip {
     @JoinColumn(name = "user_id", nullable = false)
     private UserInfo user;
 
-    public Trip(String name, UserInfo user) {
-        this.name = name;
+    public Trip(String title, UserInfo user) {
+        this.title = title;
         this.user = user;
     }
 
@@ -38,20 +38,20 @@ public class Trip {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public boolean isPublic() {
         return isPublic;
     }
 
-    public void setPublic(boolean aPublic) {
-        isPublic = aPublic;
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
     public LocalDateTime getCreatedAt() {
