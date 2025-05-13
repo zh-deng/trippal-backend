@@ -4,10 +4,13 @@ import com.trippal.trippal_backend.dtos.TripDto;
 import com.trippal.trippal_backend.model.Trip;
 import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.service.TripService;
+import com.trippal.trippal_backend.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,17 +18,30 @@ import org.springframework.web.bind.annotation.*;
 public class TripController {
 
     private final TripService tripService;
+    private final UserInfoService userInfoService;
 
     @Autowired
-    public TripController(TripService tripService) {
+    public TripController(TripService tripService, UserInfoService userInfoService) {
         this.tripService = tripService;
+        this.userInfoService = userInfoService;
     }
 
     @PostMapping
-    public ResponseEntity<TripDto> createTrip(@RequestBody Trip trip, @AuthenticationPrincipal UserInfo user) {
-        trip.setUser(user);
-        Trip createdTrip = tripService.createTrip(trip);
-        TripDto tripDto = new TripDto(createdTrip.getId(), createdTrip.getTitle(), createdTrip.isPublic(), user.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(tripDto);
+    public ResponseEntity<TripDto> createTrip(@RequestBody Trip trip) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (userDetails != null) {
+            String username = userDetails.getUsername();
+
+            UserInfo user = userInfoService.getUserByEmail(username);
+
+            Trip newTrip = new Trip(trip.getTitle(), user);
+            Trip createdTrip = tripService.createTrip(newTrip);
+            TripDto tripDto = new TripDto(createdTrip.getId(), createdTrip.getTitle(), createdTrip.isPublic(), user.getId());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(tripDto);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 }
