@@ -8,7 +8,6 @@ import com.trippal.trippal_backend.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -31,12 +30,9 @@ public class TripController {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (userDetails != null) {
-            String username = userDetails.getUsername();
+            UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
 
-            UserInfo user = userInfoService.getUserByEmail(username);
-
-            Trip newTrip = new Trip(trip.getTitle(), user);
-            Trip createdTrip = tripService.createTrip(newTrip);
+            Trip createdTrip = tripService.createTrip(new Trip(trip.getTitle(), user));
             TripDto tripDto = new TripDto(createdTrip.getId(), createdTrip.getTitle(), createdTrip.isPublic(), user.getId());
 
             return ResponseEntity.status(HttpStatus.CREATED).body(tripDto);
