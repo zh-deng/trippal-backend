@@ -14,14 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api")
 public class UserController {
 
     private final UserInfoService userInfoService;
@@ -78,9 +76,9 @@ public class UserController {
     public ResponseEntity<?> logout(HttpServletResponse response) {
         Cookie cookie = new Cookie("jwt", null);
         cookie.setHttpOnly(true);
-        cookie.setSecure(true); // true in production
+        cookie.setSecure(true);
         cookie.setPath("/");
-        cookie.setMaxAge(0); // expires immediately
+        cookie.setMaxAge(0);
 
         response.addCookie(cookie);
         return ResponseEntity.ok("Logged out successfully");

@@ -3,6 +3,8 @@ package com.trippal.trippal_backend.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Trip {
@@ -26,13 +28,16 @@ public class Trip {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private UserInfo user;
+    private UserInfo userInfo;
+
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoadmapItem> roadmapItems = new ArrayList<>();
 
     public Trip() {}
 
-    public Trip(String title, UserInfo user) {
+    public Trip(String title, UserInfo userInfo) {
         this.title = title;
-        this.user = user;
+        this.userInfo = userInfo;
     }
 
 
@@ -65,10 +70,18 @@ public class Trip {
     }
 
     public UserInfo getUser() {
-        return user;
+        return userInfo;
     }
 
-    public void setUser(UserInfo user) {
-        this.user = user;
+    public void setUser(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
+
+    public List<RoadmapItem> getRoadmapItems() {
+        return roadmapItems;
+    }
+
+    public void setRoadmapItems(List<RoadmapItem> roadmapItems) {
+        this.roadmapItems = roadmapItems;
     }
 }

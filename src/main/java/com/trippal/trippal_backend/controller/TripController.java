@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/trip")
+@RequestMapping("/api/trip")
 public class TripController {
 
     private final TripService tripService;

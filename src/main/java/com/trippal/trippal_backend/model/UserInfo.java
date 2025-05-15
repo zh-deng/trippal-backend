@@ -23,11 +23,10 @@ public class UserInfo {
 
     private String roles;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "userInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("createdAt ASC")
     private List<Trip> trips = new ArrayList<>();
 
-    // No-argument constructor
     public UserInfo() {
     }
 
