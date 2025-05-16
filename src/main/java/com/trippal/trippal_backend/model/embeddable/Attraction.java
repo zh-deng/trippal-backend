@@ -8,13 +8,13 @@ import jakarta.persistence.Transient;
 @Embeddable
 public class Attraction {
 
-    @Column(name = "attraction_name", nullable = false)
+    @Column(name = "attraction_name", nullable = true)
     private String name;
 
-    @Column(name = "attraction_latitude", nullable = false)
+    @Column(name = "attraction_latitude", nullable = true)
     private Double latitude;
 
-    @Column(name = "attraction_longitude", nullable = false)
+    @Column(name = "attraction_longitude", nullable = true)
     private Double longitude;
 
     public Attraction() {}

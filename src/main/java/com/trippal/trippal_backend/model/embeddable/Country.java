@@ -8,16 +8,16 @@ import jakarta.persistence.Transient;
 @Embeddable
 public class Country {
 
-    @Column(name = "country_name", nullable = false)
+    @Column(name = "country_name", nullable = true)
     private String name;
 
-    @Column(name = "country_latitude", nullable = false)
+    @Column(name = "country_latitude", nullable = true)
     private Double latitude;
 
-    @Column(name = "country_longitude", nullable = false)
+    @Column(name = "country_longitude", nullable = true)
     private Double longitude;
 
-    @Column(name = "country_countryCode", nullable = false)
+    @Column(name = "country_countryCode", nullable = true)
     private String countryCode;
 
     public Country() {}
