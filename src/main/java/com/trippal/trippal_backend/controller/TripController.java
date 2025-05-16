@@ -33,9 +33,25 @@ public class TripController {
             UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
 
             Trip createdTrip = tripService.createTrip(new Trip(trip.getTitle(), user));
-            TripDto tripDto = new TripDto(createdTrip.getId(), createdTrip.getTitle(), createdTrip.isPublic(), user.getId());
+            TripDto tripDto = new TripDto(createdTrip.getId(), createdTrip.getTitle(), createdTrip.isPublic(), user.getId(), createdTrip.getRoadmapItems());
 
             return ResponseEntity.status(HttpStatus.CREATED).body(tripDto);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TripDto> updateTrip(@RequestBody Trip trip, @PathVariable Long id) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (userDetails != null) {
+            UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
+
+            Trip updatedTrip = tripService.updateTrip(id, trip, user);
+            TripDto tripDto = new TripDto(updatedTrip.getId(), updatedTrip.getTitle(), updatedTrip.isPublic(), user.getId(), updatedTrip.getRoadmapItems());
+
+            return ResponseEntity.status(HttpStatus.OK).body(tripDto);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
