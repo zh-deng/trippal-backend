@@ -3,7 +3,6 @@ package com.trippal.trippal_backend.service;
 import com.trippal.trippal_backend.dtos.TripDto;
 import com.trippal.trippal_backend.dtos.UserInfoDto;
 import com.trippal.trippal_backend.exception.DuplicateUserException;
-import com.trippal.trippal_backend.model.Trip;
 import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.repository.UserInfoRepository;
 
@@ -65,7 +64,7 @@ public class UserInfoService implements UserDetailsService {
     @Transactional
     public List<TripDto> getUserTripDtos(UserInfo user) {
         return user.getTrips().stream()
-                .map(trip -> new TripDto(trip.getId(), trip.getTitle(), trip.isPublic(), user.getId()))
+                .map(trip -> new TripDto(trip.getId(), trip.getTitle(), trip.isPublic(), user.getId(), trip.getRoadmapItems()))
                 .collect(Collectors.toList());
     }
 }

@@ -65,10 +65,6 @@ public class Trip {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public UserInfo getUser() {
         return userInfo;
     }

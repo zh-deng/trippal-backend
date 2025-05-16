@@ -5,6 +5,8 @@ import com.trippal.trippal_backend.model.embeddable.City;
 import com.trippal.trippal_backend.model.embeddable.Country;
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 public class RoadmapItem {
 
@@ -14,6 +16,9 @@ public class RoadmapItem {
 
     @Column(nullable = false)
     private String title;
+
+    @Column
+    private Date date;
 
     @Embedded
     private Country country;
@@ -30,11 +35,13 @@ public class RoadmapItem {
 
     public RoadmapItem() {}
 
-    public RoadmapItem(String title, Country country, City city, Attraction attraction) {
+    public RoadmapItem(String title, Date date, Country country, City city, Attraction attraction, Trip trip) {
         this.title = title;
+        this.date = date;
         this.country = country;
         this.city = city;
         this.attraction = attraction;
+        this.trip = trip;
     }
 
     public Long getId() {
@@ -83,5 +90,13 @@ public class RoadmapItem {
 
     public void setTrip(Trip trip) {
         this.trip = trip;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
