@@ -1,6 +1,6 @@
-# Trippal Backend
+# TripPal Backend
 
-**Trippal Backend** is the server-side component of the Trippal application, a comprehensive trip planning tool designed to help users efficiently organize travel itineraries.
+**TripPal Backend** is the server-side component of the Trippal application, a comprehensive trip planning tool designed to help users efficiently organize travel itineraries.
 
 ## Features
 
