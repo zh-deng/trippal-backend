@@ -39,13 +39,13 @@ Make sure you have the following installed:
    cd trippal-backend
 
 2. Build the project using Maven:
-
-  mvn clean install
+   ```bash
+   mvn clean install
 
 3. Run the application:
+   ```bash
+   mvn package
+   
+   docker-compose build
 
-  mvn package
-
-  docker-compose build
-
-  docker-compose up
+   docker-compose up
