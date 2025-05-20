@@ -5,7 +5,9 @@ import com.trippal.trippal_backend.model.embeddable.City;
 import com.trippal.trippal_backend.model.embeddable.Country;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class RoadmapItem {
@@ -19,6 +21,12 @@ public class RoadmapItem {
 
     @Column
     private Date date;
+
+    @Column
+    private String notes;
+
+    @OneToMany(mappedBy = "roadmapItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UploadedFile> files = new ArrayList<>();
 
     @Embedded
     private Country country;
@@ -35,9 +43,10 @@ public class RoadmapItem {
 
     public RoadmapItem() {}
 
-    public RoadmapItem(String title, Date date, Country country, City city, Attraction attraction, Trip trip) {
+    public RoadmapItem(String title, Date date, String notes, Country country, City city, Attraction attraction, Trip trip) {
         this.title = title;
         this.date = date;
+        this.notes = notes;
         this.country = country;
         this.city = city;
         this.attraction = attraction;
@@ -98,5 +107,21 @@ public class RoadmapItem {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public List<UploadedFile> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<UploadedFile> files) {
+        this.files = files;
     }
 }
