@@ -1,5 +1,6 @@
 package com.trippal.trippal_backend.service;
 
+import com.trippal.trippal_backend.model.RoadmapItem;
 import com.trippal.trippal_backend.model.Trip;
 import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.repository.TripRepository;
@@ -19,6 +20,10 @@ public class TripService {
     public TripService(TripRepository tripRepository) {
         this.tripRepository = tripRepository;
     }
+
+    public Trip getTripById(Long id) {
+        return tripRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Trip not found with id: " + id));
+    };
 
     public Trip createTrip(Trip trip) {
         return tripRepository.save(trip);

@@ -1,5 +1,6 @@
 package com.trippal.trippal_backend.controller;
 
+import com.trippal.trippal_backend.dtos.RoadmapItemPreviewDto;
 import com.trippal.trippal_backend.dtos.TripDto;
 import com.trippal.trippal_backend.model.Trip;
 import com.trippal.trippal_backend.model.UserInfo;
@@ -11,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/trip")
@@ -24,6 +28,22 @@ public class TripController {
         this.tripService = tripService;
         this.userInfoService = userInfoService;
     }
+
+    @GetMapping("/{id}/roadmapList")
+    public ResponseEntity<List<RoadmapItemPreviewDto>> getRoadmapList(@PathVariable Long id) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (userDetails != null) {
+            Trip existingTrip = tripService.getTripById(id);
+            List<RoadmapItemPreviewDto> roadmapItemPreviewDtos = existingTrip.getRoadmapItems().stream()
+                    .map(item -> new RoadmapItemPreviewDto(item.getId(), item.getTitle()))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(roadmapItemPreviewDtos);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+    };
 
     @PostMapping
     public ResponseEntity<TripDto> createTrip(@RequestBody Trip trip) {
