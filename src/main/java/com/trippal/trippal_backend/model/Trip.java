@@ -7,11 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Trip {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Trip extends BaseEntity {
 
     @Column(nullable = false)
     private String title;
@@ -38,11 +34,6 @@ public class Trip {
     public Trip(String title, UserInfo userInfo) {
         this.title = title;
         this.userInfo = userInfo;
-    }
-
-
-    public Long getId() {
-        return id;
     }
 
     public String getTitle() {

@@ -3,11 +3,7 @@ package com.trippal.trippal_backend.model;
 import jakarta.persistence.*;
 
 @Entity
-public class UploadedFile {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class UploadedFile extends BaseEntity {
 
     private String name;
     private String url;
@@ -21,11 +17,6 @@ public class UploadedFile {
     public UploadedFile(String name, String url) {
         this.name = name;
         this.url = url;
-    }
-
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {

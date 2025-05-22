@@ -6,11 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class UserInfo {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class UserInfo extends BaseEntity {
 
     @Column(unique = true, nullable = false)
     private String name;
@@ -31,17 +27,11 @@ public class UserInfo {
     }
 
     // All-argument constructor
-    public UserInfo(Long id, String name, String email, String password, String roles) {
-        this.id = id;
+    public UserInfo(String name, String email, String password, String roles) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.roles = roles;
-    }
-
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {

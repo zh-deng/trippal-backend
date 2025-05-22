@@ -10,11 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-public class RoadmapItem {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class RoadmapItem extends BaseEntity {
 
     @Column(nullable = false)
     private String title;
@@ -51,14 +47,6 @@ public class RoadmapItem {
         this.city = city;
         this.attraction = attraction;
         this.trip = trip;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getTitle() {
