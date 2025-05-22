@@ -4,6 +4,7 @@ import com.trippal.trippal_backend.dtos.RoadmapItemDto;
 import com.trippal.trippal_backend.model.RoadmapItem;
 import com.trippal.trippal_backend.model.Trip;
 import com.trippal.trippal_backend.model.UploadedFile;
+import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.repository.RoadmapItemRepository;
 import com.trippal.trippal_backend.repository.TripRepository;
 import com.trippal.trippal_backend.repository.UploadedFileRepository;
@@ -11,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,5 +83,14 @@ public class RoadmapItemService {
         existingItem.getFiles().addAll(newFiles);
 
         return roadmapItemRepository.save(existingItem);
+    }
+
+    public boolean deleteRoadmapItem(Long id) {
+        Optional<RoadmapItem> roadmapItemOpt = roadmapItemRepository.findById(id);
+        if (roadmapItemOpt.isPresent()) {
+            roadmapItemRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
