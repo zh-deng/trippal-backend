@@ -6,6 +6,7 @@ import com.trippal.trippal_backend.exception.DuplicateUserException;
 import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.repository.UserInfoRepository;
 
+import com.trippal.trippal_backend.security.UserInfoDetails;
 import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;

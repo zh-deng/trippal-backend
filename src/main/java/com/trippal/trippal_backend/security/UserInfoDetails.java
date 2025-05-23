@@ -1,4 +1,4 @@
-package com.trippal.trippal_backend.service;
+package com.trippal.trippal_backend.security;
 
 
 import com.trippal.trippal_backend.model.UserInfo;

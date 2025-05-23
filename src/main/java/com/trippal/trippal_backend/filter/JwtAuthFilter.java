@@ -1,6 +1,5 @@
 package com.trippal.trippal_backend.filter;
 
-import com.trippal.trippal_backend.service.UserInfoDetails;
 import com.trippal.trippal_backend.service.JwtService;
 
 import jakarta.servlet.FilterChain;

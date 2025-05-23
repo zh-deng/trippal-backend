@@ -1,10 +1,7 @@
 package com.trippal.trippal_backend.controller;
 
 import com.trippal.trippal_backend.dtos.RoadmapItemDto;
-import com.trippal.trippal_backend.dtos.TripDto;
 import com.trippal.trippal_backend.model.RoadmapItem;
-import com.trippal.trippal_backend.model.Trip;
-import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.service.RoadmapItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

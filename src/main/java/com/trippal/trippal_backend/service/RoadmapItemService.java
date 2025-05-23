@@ -4,11 +4,11 @@ import com.trippal.trippal_backend.dtos.RoadmapItemDto;
 import com.trippal.trippal_backend.model.RoadmapItem;
 import com.trippal.trippal_backend.model.Trip;
 import com.trippal.trippal_backend.model.UploadedFile;
-import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.repository.RoadmapItemRepository;
 import com.trippal.trippal_backend.repository.TripRepository;
 import com.trippal.trippal_backend.repository.UploadedFileRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public class RoadmapItemService {
 
         RoadmapItem savedItem = roadmapItemRepository.save(roadmapItem);
 
-        List<UploadedFile> files = roadmapItem.getFiles().stream()
+        List<UploadedFile> files = roadmapItemDto.getFiles().stream()
                 .map(fileDto -> {
                     UploadedFile file = new UploadedFile();
                     file.setName(fileDto.getName());
@@ -55,6 +55,7 @@ public class RoadmapItemService {
         return savedItem;
     }
 
+    @Transactional
     public RoadmapItem updateRoadmapItem(RoadmapItemDto roadmapItemDto) {
         RoadmapItem existingItem = roadmapItemRepository.findById(roadmapItemDto.getId())
                 .orElseThrow(() -> new RuntimeException("Roadmap item not found"));
