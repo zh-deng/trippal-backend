@@ -2,7 +2,6 @@ package com.trippal.trippal_backend.security;
 
 
 import com.trippal.trippal_backend.model.UserInfo;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class UserInfoDetails implements UserDetails {
 
-    private String username; // Changed from 'name' to 'email' for clarity
+    private String username; // username = email
     private String password;
     private List<GrantedAuthority> authorities;
 

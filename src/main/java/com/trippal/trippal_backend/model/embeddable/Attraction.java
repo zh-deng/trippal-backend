@@ -17,7 +17,8 @@ public class Attraction {
     @Column(name = "attraction_longitude", nullable = true)
     private Double longitude;
 
-    public Attraction() {}
+    public Attraction() {
+    }
 
     public Attraction(String name, Double latitude, Double longitude) {
         this.name = name;
@@ -25,15 +26,31 @@ public class Attraction {
         this.longitude = longitude;
     }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
 
-    public Double getLatitude() { return latitude; }
-    public void setLatitude(Double latitude) { this.latitude = latitude; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public Double getLongitude() { return longitude; }
-    public void setLongitude(Double longitude) { this.longitude = longitude; }
+    public Double getLatitude() {
+        return latitude;
+    }
 
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    // Not persisted in db
     @Transient
     @JsonProperty("coordinates")
     public double[] getCoordinates() {

@@ -31,67 +31,49 @@ public class TripController {
 
     @GetMapping("/{id}/roadmapList")
     public ResponseEntity<List<RoadmapItemPreviewDto>> getRoadmapList(@PathVariable Long id) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Trip existingTrip = tripService.getTripById(id);
+        List<RoadmapItemPreviewDto> roadmapItemPreviewDtos = existingTrip.getRoadmapItems().stream()
+                .map(RoadmapItemPreviewDto::new)
+                .collect(Collectors.toList());
 
-        if (userDetails != null) {
-            Trip existingTrip = tripService.getTripById(id);
-            List<RoadmapItemPreviewDto> roadmapItemPreviewDtos = existingTrip.getRoadmapItems().stream()
-                    .map(item -> new RoadmapItemPreviewDto(item.getId(), item.getTitle()))
-                    .collect(Collectors.toList());
-
-            return ResponseEntity.ok(roadmapItemPreviewDtos);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
-    };
+        return ResponseEntity.ok(roadmapItemPreviewDtos);
+    }
 
     @PostMapping
     public ResponseEntity<TripDto> createTrip(@RequestBody Trip trip) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (userDetails != null) {
-            UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
+        UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
 
-            Trip createdTrip = tripService.createTrip(new Trip(trip.getTitle(), user));
-            TripDto tripDto = new TripDto(createdTrip.getId(), createdTrip.getTitle(), createdTrip.isPublic(), user.getId(), createdTrip.getRoadmapItems());
+        Trip createdTrip = tripService.createTrip(new Trip(trip.getTitle(), user));
+        TripDto tripDto = new TripDto(createdTrip);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(tripDto);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(tripDto);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TripDto> updateTrip(@RequestBody Trip trip, @PathVariable Long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (userDetails != null) {
-            UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
+        UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
 
-            Trip updatedTrip = tripService.updateTrip(id, trip, user);
-            TripDto tripDto = new TripDto(updatedTrip.getId(), updatedTrip.getTitle(), updatedTrip.isPublic(), user.getId(), updatedTrip.getRoadmapItems());
+        Trip updatedTrip = tripService.updateTrip(id, trip, user);
+        TripDto tripDto = new TripDto(updatedTrip);
 
-            return ResponseEntity.status(HttpStatus.OK).body(tripDto);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(tripDto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTrip(@PathVariable Long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (userDetails != null) {
-            UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
-            boolean deleted = tripService.deleteTrip(id, user);
+        UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
+        boolean deleted = tripService.deleteTrip(id, user);
 
-            if (deleted) {
-                return ResponseEntity.noContent().build();
-            } else {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
+        if (deleted) {
+            return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 }

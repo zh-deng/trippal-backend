@@ -20,7 +20,8 @@ public class Country {
     @Column(name = "country_countryCode", nullable = true)
     private String countryCode;
 
-    public Country() {}
+    public Country() {
+    }
 
     public Country(String name, Double latitude, Double longitude) {
         this.name = name;
@@ -28,18 +29,39 @@ public class Country {
         this.longitude = longitude;
     }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
 
-    public Double getLatitude() { return latitude; }
-    public void setLatitude(Double latitude) { this.latitude = latitude; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public Double getLongitude() { return longitude; }
-    public void setLongitude(Double longitude) { this.longitude = longitude; }
+    public Double getLatitude() {
+        return latitude;
+    }
 
-    public String getCountryCode() { return countryCode; }
-    public void setCountryCode(String countryCode) { this.countryCode = countryCode; }
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
 
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    // Not persisted in db
     @Transient
     @JsonProperty("coordinates")
     public double[] getCoordinates() {

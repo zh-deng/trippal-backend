@@ -9,6 +9,7 @@ import com.trippal.trippal_backend.repository.TripRepository;
 import com.trippal.trippal_backend.repository.UploadedFileRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class RoadmapItemService {
     private final TripRepository tripRepository;
     private final UploadedFileRepository uploadedFileRepository;
 
+    @Autowired
     public RoadmapItemService(RoadmapItemRepository roadmapItemRepository, TripRepository tripRepository, UploadedFileRepository uploadedFileRepository) {
         this.roadmapItemRepository = roadmapItemRepository;
         this.tripRepository = tripRepository;
@@ -30,12 +32,14 @@ public class RoadmapItemService {
 
     public RoadmapItem getRoadmapItemById(Long id) {
         return roadmapItemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Roadmap item not found with id: " + id));
-    };
+    }
+
+    ;
 
     public RoadmapItem createRoadmapItem(RoadmapItemDto roadmapItemDto) {
         Trip trip = tripRepository.findById(roadmapItemDto.getTripId()).orElseThrow(() -> new RuntimeException("Trip not found"));
 
-        RoadmapItem roadmapItem = new RoadmapItem(roadmapItemDto.getTitle(), roadmapItemDto.getDate(), roadmapItemDto.getNotes(), roadmapItemDto.getCountry(), roadmapItemDto.getCity(), roadmapItemDto.getAttraction(), trip);
+        RoadmapItem roadmapItem = new RoadmapItem(roadmapItemDto, trip);
 
         RoadmapItem savedItem = roadmapItemRepository.save(roadmapItem);
 

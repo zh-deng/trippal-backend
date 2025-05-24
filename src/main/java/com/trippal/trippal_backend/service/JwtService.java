@@ -41,11 +41,11 @@ public class JwtService {
                     .setSigningKey(secret)
                     .build()
                     .parseClaimsJws(token)
-                    .getBody();  // You can retrieve the body here if you want
+                    .getBody();
 
             return true;
         } catch (SignatureException | ExpiredJwtException | MalformedJwtException e) {
-            return false;  // If any exception occurs, the token is invalid
+            return false;
         }
     }
 

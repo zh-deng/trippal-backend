@@ -1,5 +1,6 @@
 package com.trippal.trippal_backend.model;
 
+import com.trippal.trippal_backend.dtos.RoadmapItemDto;
 import com.trippal.trippal_backend.model.embeddable.Attraction;
 import com.trippal.trippal_backend.model.embeddable.City;
 import com.trippal.trippal_backend.model.embeddable.Country;
@@ -37,7 +38,8 @@ public class RoadmapItem extends BaseEntity {
     @JoinColumn(name = "trip_id", nullable = false)
     private Trip trip;
 
-    public RoadmapItem() {}
+    public RoadmapItem() {
+    }
 
     public RoadmapItem(String title, Date date, String notes, Country country, City city, Attraction attraction, Trip trip) {
         this.title = title;
@@ -46,6 +48,16 @@ public class RoadmapItem extends BaseEntity {
         this.country = country;
         this.city = city;
         this.attraction = attraction;
+        this.trip = trip;
+    }
+
+    public RoadmapItem(RoadmapItemDto roadmapItemDto, Trip trip) {
+        this.title = roadmapItemDto.getTitle();
+        this.date = roadmapItemDto.getDate();
+        this.notes = roadmapItemDto.getNotes();
+        this.country = roadmapItemDto.getCountry();
+        this.city = roadmapItemDto.getCity();
+        this.attraction = roadmapItemDto.getAttraction();
         this.trip = trip;
     }
 

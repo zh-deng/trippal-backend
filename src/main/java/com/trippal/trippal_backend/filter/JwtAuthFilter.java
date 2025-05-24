@@ -1,7 +1,6 @@
 package com.trippal.trippal_backend.filter;
 
 import com.trippal.trippal_backend.service.JwtService;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -30,6 +29,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         this.jwtService = jwtService;
     }
 
+    /**
+     * This method is called once per request and is responsible for:
+     * - Extracting JWT token from the Authorization header or cookies
+     * - Validating the token and extracting the username
+     * - Loading the user details based on username
+     * - Setting the Authentication object in Spring Security's context if token is valid
+     * <p>
+     * If any step fails, it sends a 401 Unauthorized response immediately.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -38,6 +46,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String token = null;
         String username = null;
 
+        // Checks if token is in header
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
             try {
@@ -48,6 +57,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         }
 
+        // If token was not found in header, attempt to retrieve it from cookies
         if (token == null) {
             Cookie[] cookies = request.getCookies();
             if (cookies != null) {
@@ -71,8 +81,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         }
 
+        // If a username was successfully extracted and the user is not yet authenticated in the security context
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+            // Validate token against user details (checks signature, expiration, etc.)
             if (jwtService.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());

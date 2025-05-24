@@ -31,7 +31,6 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
-    // Constructor injection for required dependencies
     public SecurityConfig(JwtAuthFilter jwtAuthFilter,
                           UserDetailsService userDetailsService,
                           PasswordEncoder passwordEncoder) {
@@ -50,6 +49,7 @@ public class SecurityConfig {
                 // Disable CSRF (not needed for stateless JWT)
                 .csrf(csrf -> csrf.disable())
 
+                // Enable CORS with a custom configuration source
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 // Configure endpoint authorization
@@ -93,6 +93,7 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
+    // Custom cors configurations
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();

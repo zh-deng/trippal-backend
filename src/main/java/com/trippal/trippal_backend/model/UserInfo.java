@@ -26,7 +26,6 @@ public class UserInfo extends BaseEntity {
     public UserInfo() {
     }
 
-    // All-argument constructor
     public UserInfo(String name, String email, String password, String roles) {
         this.name = name;
         this.email = email;

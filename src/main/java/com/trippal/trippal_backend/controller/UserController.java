@@ -14,7 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -42,13 +45,16 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> loginAndSetCookie(@RequestBody AuthRequest authRequest, HttpServletResponse response) {
         try {
+            // Attempt to authenticate the user
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
             );
 
             if (authentication.isAuthenticated()) {
+                // Generate a JWT token if authenticated
                 String jwt = jwtService.generateToken(authRequest.getUsername());
 
+                // Create a secure HTTP-only cookie to store the JWT token
                 Cookie cookie = new Cookie("jwt", jwt);
                 cookie.setHttpOnly(true);
                 cookie.setSecure(true);
@@ -61,7 +67,7 @@ public class UserController {
 
                 List<TripDto> tripDtos = userInfoService.getUserTripDtos(user);
 
-                UserInfoDto dto = new UserInfoDto(user.getId(), user.getName(), user.getEmail(), tripDtos);
+                UserInfoDto dto = new UserInfoDto(user, tripDtos);
 
                 return ResponseEntity.ok(dto);
             } else {

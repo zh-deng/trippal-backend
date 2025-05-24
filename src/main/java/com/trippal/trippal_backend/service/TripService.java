@@ -1,12 +1,10 @@
 package com.trippal.trippal_backend.service;
 
-import com.trippal.trippal_backend.model.RoadmapItem;
 import com.trippal.trippal_backend.model.Trip;
 import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.repository.TripRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -23,7 +21,9 @@ public class TripService {
 
     public Trip getTripById(Long id) {
         return tripRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Trip not found with id: " + id));
-    };
+    }
+
+    ;
 
     public Trip createTrip(Trip trip) {
         return tripRepository.save(trip);
@@ -34,10 +34,6 @@ public class TripService {
 
         if (existingTripOpt.isPresent()) {
             Trip existingTrip = existingTripOpt.get();
-
-            if (!existingTrip.getUser().getId().equals(user.getId())) {
-                throw new AccessDeniedException("User does not own this trip.");
-            }
 
             existingTrip.setTitle(updatedTrip.getTitle());
             existingTrip.setPublic(updatedTrip.isPublic());

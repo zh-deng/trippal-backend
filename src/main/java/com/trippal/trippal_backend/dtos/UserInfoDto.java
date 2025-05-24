@@ -1,8 +1,6 @@
 package com.trippal.trippal_backend.dtos;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.trippal.trippal_backend.model.UserInfo;
 
 import java.util.List;
 
@@ -13,21 +11,18 @@ public class UserInfoDto {
     private String email;
     private List<TripDto> trips;
 
-    // All-argument constructor
-    public UserInfoDto(Long id, String name, String email, List<TripDto> trips) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
+    public UserInfoDto() {
+    }
+
+    public UserInfoDto(UserInfo userInfo, List<TripDto> trips) {
+        this.id = userInfo.getId();
+        this.name = userInfo.getName();
+        this.email = userInfo.getEmail();
         this.trips = trips;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {

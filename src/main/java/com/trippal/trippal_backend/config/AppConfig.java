@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class AppConfig {
 
+    // Bean config class for PasswordEncoder to avoid circular dependency
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

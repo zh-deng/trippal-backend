@@ -1,5 +1,6 @@
 package com.trippal.trippal_backend.dtos;
 
+import com.trippal.trippal_backend.model.RoadmapItem;
 import com.trippal.trippal_backend.model.UploadedFile;
 import com.trippal.trippal_backend.model.embeddable.Attraction;
 import com.trippal.trippal_backend.model.embeddable.City;
@@ -19,16 +20,19 @@ public class RoadmapItemDto {
     private Attraction attraction;
     private Long tripId;
 
-    public RoadmapItemDto(Long id, String title, Date date, String notes, List<UploadedFile> files, Country country, City city, Attraction attraction, Long tripId) {
-        this.id = id;
-        this.title = title;
-        this.date = date;
-        this.notes = notes;
-        this.files = files;
-        this.country = country;
-        this.city = city;
-        this.attraction = attraction;
-        this.tripId = tripId;
+    public RoadmapItemDto() {
+    }
+
+    public RoadmapItemDto(RoadmapItem roadmapItem) {
+        this.id = roadmapItem.getId();
+        this.title = roadmapItem.getTitle();
+        this.date = roadmapItem.getDate();
+        this.notes = roadmapItem.getNotes();
+        this.files = roadmapItem.getFiles();
+        this.country = roadmapItem.getCountry();
+        this.city = roadmapItem.getCity();
+        this.attraction = roadmapItem.getAttraction();
+        this.tripId = roadmapItem.getTrip().getId();
     }
 
     public Long getId() {

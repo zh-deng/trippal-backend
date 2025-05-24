@@ -51,7 +51,7 @@ public class UserInfoService implements UserDetailsService {
             userInfo.setPassword(encoder.encode(userInfo.getPassword()));
 
             UserInfo savedUser = userInfoRepository.save(userInfo);
-            return new UserInfoDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail(), getUserTripDtos(savedUser));
+            return new UserInfoDto(savedUser, getUserTripDtos(savedUser));
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateUserException("Email or username already exists");
         }
@@ -65,7 +65,7 @@ public class UserInfoService implements UserDetailsService {
     @Transactional
     public List<TripDto> getUserTripDtos(UserInfo user) {
         return user.getTrips().stream()
-                .map(trip -> new TripDto(trip.getId(), trip.getTitle(), trip.isPublic(), user.getId(), trip.getRoadmapItems()))
+                .map(TripDto::new)
                 .collect(Collectors.toList());
     }
 }
