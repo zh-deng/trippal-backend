@@ -1,7 +1,6 @@
 package com.trippal.trippal_backend.service;
 
 import com.trippal.trippal_backend.model.Trip;
-import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.repository.TripRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +22,11 @@ public class TripService {
         return tripRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Trip not found with id: " + id));
     }
 
-    ;
-
     public Trip createTrip(Trip trip) {
         return tripRepository.save(trip);
     }
 
-    public Trip updateTrip(Long id, Trip updatedTrip, UserInfo user) {
+    public Trip updateTrip(Long id, Trip updatedTrip) {
         Optional<Trip> existingTripOpt = tripRepository.findById(id);
 
         if (existingTripOpt.isPresent()) {
@@ -46,9 +43,9 @@ public class TripService {
         }
     }
 
-    public boolean deleteTrip(Long id, UserInfo user) {
+    public boolean deleteTrip(Long id) {
         Optional<Trip> tripOpt = tripRepository.findById(id);
-        if (tripOpt.isPresent() && tripOpt.get().getUser().getId().equals(user.getId())) {
+        if (tripOpt.isPresent()) {
             tripRepository.deleteById(id);
             return true;
         }

@@ -57,7 +57,7 @@ public class TripController {
 
         UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
 
-        Trip updatedTrip = tripService.updateTrip(id, trip, user);
+        Trip updatedTrip = tripService.updateTrip(id, trip);
         TripDto tripDto = new TripDto(updatedTrip);
 
         return ResponseEntity.status(HttpStatus.OK).body(tripDto);
@@ -68,7 +68,7 @@ public class TripController {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
-        boolean deleted = tripService.deleteTrip(id, user);
+        boolean deleted = tripService.deleteTrip(id);
 
         if (deleted) {
             return ResponseEntity.noContent().build();
