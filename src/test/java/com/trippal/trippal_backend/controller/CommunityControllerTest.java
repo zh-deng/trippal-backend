@@ -2,6 +2,7 @@ package com.trippal.trippal_backend.controller;
 
 import com.trippal.trippal_backend.dtos.TripDto;
 import com.trippal.trippal_backend.model.Trip;
+import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.service.CommunityService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,10 +28,16 @@ public class CommunityControllerTest {
     private CommunityController communityController;
 
     @Test
-    public void getPublicTrips_ReturnsPaginatedDtos() {
+    public void testGetPublicTrips_ReturnsPaginatedDtos() {
         int page = 0;
         int size = 10;
+
+        UserInfo user = new UserInfo();
+        user.setId(1L);
+
         Trip trip = new Trip();
+        trip.setUser(user);
+
         Page<Trip> mockTripPage = new PageImpl<>(Collections.singletonList(trip));
 
         when(communityService.getPublicTrips(page, size))
