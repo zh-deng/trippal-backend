@@ -1,15 +1,15 @@
 package com.trippal.trippal_backend.dtos;
 
-import com.trippal.trippal_backend.model.RoadmapItem;
 import com.trippal.trippal_backend.model.Trip;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TripDto {
     private Long id;
     private String title;
     private boolean isPublic;
-    private List<RoadmapItem> roadmapItems;
+    private List<RoadmapItemDto> roadmapItems;
     private Long userId;
 
     public TripDto() {
@@ -20,7 +20,7 @@ public class TripDto {
         this.title = trip.getTitle();
         this.isPublic = trip.isPublic();
         this.userId = trip.getUser().getId();
-        this.roadmapItems = trip.getRoadmapItems();
+        this.roadmapItems = trip.getRoadmapItems().stream().map(RoadmapItemDto::new).collect(Collectors.toList());
     }
 
     public Long getId() {
@@ -43,11 +43,11 @@ public class TripDto {
         isPublic = aPublic;
     }
 
-    public List<RoadmapItem> getRoadmapItems() {
+    public List<RoadmapItemDto> getRoadmapItems() {
         return roadmapItems;
     }
 
-    public void setRoadmapItems(List<RoadmapItem> roadmapItems) {
+    public void setRoadmapItems(List<RoadmapItemDto> roadmapItems) {
         this.roadmapItems = roadmapItems;
     }
 

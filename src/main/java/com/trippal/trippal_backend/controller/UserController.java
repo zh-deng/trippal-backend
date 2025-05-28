@@ -1,6 +1,5 @@
 package com.trippal.trippal_backend.controller;
 
-import com.trippal.trippal_backend.dtos.TripDto;
 import com.trippal.trippal_backend.dtos.UserInfoDto;
 import com.trippal.trippal_backend.model.AuthRequest;
 import com.trippal.trippal_backend.model.UserInfo;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -65,9 +62,7 @@ public class UserController {
 
                 UserInfo user = userInfoService.getUserByEmail(authRequest.getUsername());
 
-                List<TripDto> tripDtos = userInfoService.getUserTripDtos(user);
-
-                UserInfoDto dto = new UserInfoDto(user, tripDtos);
+                UserInfoDto dto = new UserInfoDto(user);
 
                 return ResponseEntity.ok(dto);
             } else {

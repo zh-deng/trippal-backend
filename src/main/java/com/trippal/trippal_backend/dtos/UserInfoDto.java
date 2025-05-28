@@ -3,6 +3,7 @@ package com.trippal.trippal_backend.dtos;
 import com.trippal.trippal_backend.model.UserInfo;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserInfoDto {
 
@@ -14,11 +15,11 @@ public class UserInfoDto {
     public UserInfoDto() {
     }
 
-    public UserInfoDto(UserInfo userInfo, List<TripDto> trips) {
+    public UserInfoDto(UserInfo userInfo) {
         this.id = userInfo.getId();
         this.name = userInfo.getName();
         this.email = userInfo.getEmail();
-        this.trips = trips;
+        this.trips = userInfo.getTrips().stream().map(TripDto::new).collect(Collectors.toList());
     }
 
     public Long getId() {

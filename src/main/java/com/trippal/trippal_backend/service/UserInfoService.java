@@ -5,7 +5,6 @@ import com.trippal.trippal_backend.dtos.UserInfoDto;
 import com.trippal.trippal_backend.exception.DuplicateUserException;
 import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.repository.UserInfoRepository;
-
 import com.trippal.trippal_backend.security.UserInfoDetails;
 import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -51,7 +50,7 @@ public class UserInfoService implements UserDetailsService {
             userInfo.setPassword(encoder.encode(userInfo.getPassword()));
 
             UserInfo savedUser = userInfoRepository.save(userInfo);
-            return new UserInfoDto(savedUser, getUserTripDtos(savedUser));
+            return new UserInfoDto(savedUser);
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateUserException("Email or username already exists");
         }
