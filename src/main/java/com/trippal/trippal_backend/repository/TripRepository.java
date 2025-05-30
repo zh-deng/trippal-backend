@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TripRepository extends JpaRepository<Trip, Long> {
     Page<Trip> findByPublicTrue(Pageable pageable);
+
+    Page<Trip> findByCountry_Name(Pageable pageable, String name);
 }

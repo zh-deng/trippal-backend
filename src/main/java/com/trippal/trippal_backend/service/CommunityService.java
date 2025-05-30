@@ -18,9 +18,13 @@ public class CommunityService {
         this.tripRepository = tripRepository;
     }
 
-    // Handles pagination of public trips
     public Page<Trip> getPublicTrips(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return tripRepository.findByPublicTrue(pageable);
+    }
+
+    public Page<Trip> getPublicTripsByCountry(int page, int size, String countryName) {
+        Pageable pageable = PageRequest.of(page, size);
+        return tripRepository.findByCountry_Name(pageable, countryName);
     }
 }
