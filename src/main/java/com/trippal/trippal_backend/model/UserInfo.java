@@ -73,4 +73,8 @@ public class UserInfo extends BaseEntity {
         this.trips = trips;
     }
 
+    public void addTrip(Trip trip) {
+        trips.add(trip);
+        trip.setUser(this);
+    }
 }

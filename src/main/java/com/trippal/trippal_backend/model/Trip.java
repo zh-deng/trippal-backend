@@ -29,7 +29,8 @@ public class Trip extends BaseEntity {
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoadmapItem> roadmapItems = new ArrayList<>();
 
-    public Trip() {}
+    public Trip() {
+    }
 
     public Trip(String title, UserInfo userInfo) {
         this.title = title;
@@ -70,5 +71,10 @@ public class Trip extends BaseEntity {
 
     public void setRoadmapItems(List<RoadmapItem> roadmapItems) {
         this.roadmapItems = roadmapItems;
+    }
+
+    public void addRoadmapItem(RoadmapItem roadmapItem) {
+        roadmapItems.add(roadmapItem);
+        roadmapItem.setTrip(this);
     }
 }
