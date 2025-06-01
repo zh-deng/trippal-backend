@@ -28,20 +28,35 @@ public class DataSeeder implements CommandLineRunner {
             UserInfo newUser = new UserInfo("John Doe", "john@gmail.com", "secret", "User");
 
             Trip trip1 = new Trip("Trip 1", newUser);
+            trip1.setPublic(true);
             Trip trip2 = new Trip("Trip 2", newUser);
+            trip2.setPublic(true);
             Trip trip3 = new Trip("Trip 3", newUser);
+            trip3.setPublic(true);
             Trip trip4 = new Trip("Trip 4", newUser);
+            trip4.setPublic(true);
             Trip trip5 = new Trip("Trip 5", newUser);
+            trip5.setPublic(true);
             Trip trip6 = new Trip("Trip 6", newUser);
+            trip6.setPublic(true);
             Trip trip7 = new Trip("Trip 7", newUser);
+            trip7.setPublic(true);
             Trip trip8 = new Trip("Trip 8", newUser);
+            trip8.setPublic(true);
             Trip trip9 = new Trip("Trip 9", newUser);
+            trip9.setPublic(true);
             Trip trip10 = new Trip("Trip 10", newUser);
+            trip10.setPublic(true);
             Trip trip11 = new Trip("Trip 11", newUser);
+            trip11.setPublic(true);
             Trip trip12 = new Trip("Trip 12", newUser);
+            trip12.setPublic(true);
             Trip trip13 = new Trip("Trip 13", newUser);
+            trip13.setPublic(true);
             Trip trip14 = new Trip("Trip 14", newUser);
+            trip14.setPublic(true);
             Trip trip15 = new Trip("Trip 15", newUser);
+            trip15.setPublic(true);
 
             RoadmapItem roadmapItem1_1 = new RoadmapItem("Germany Munich Marienplatz", Date.from(LocalDate.parse("2024-05-31")
                     .atStartOfDay(ZoneId.systemDefault())
