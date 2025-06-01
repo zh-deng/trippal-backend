@@ -24,7 +24,7 @@ public class CommunityController {
     @GetMapping
     public Page<TripDto> getPublicTrips(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "6") int size
     ) {
         Page<Trip> tripPage = communityService.getPublicTrips(page, size);
         return tripPage.map(TripDto::new);
@@ -33,7 +33,7 @@ public class CommunityController {
     @GetMapping("/by-country")
     public Page<TripDto> getPublicTripsByCountry(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "6") int size,
             @RequestParam String countryName
     ) {
         Page<Trip> tripPage = communityService.getPublicTripsByCountry(page, size, countryName);

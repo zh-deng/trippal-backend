@@ -1,10 +1,8 @@
 package com.trippal.trippal_backend.config;
 
 import com.trippal.trippal_backend.filter.JwtAuthFilter;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -55,7 +53,7 @@ public class SecurityConfig {
                 // Configure endpoint authorization
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
-                        .requestMatchers("/api/createUser", "/api/login").permitAll()
+                        .requestMatchers("/api/createUser", "/api/login", "/api/community").permitAll()
 
                         // All other endpoints require authentication
                         .anyRequest().authenticated()
