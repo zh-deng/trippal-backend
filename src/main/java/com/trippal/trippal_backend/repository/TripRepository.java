@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TripRepository extends JpaRepository<Trip, Long> {
-    Page<Trip> findByPublicTrue(Pageable pageable);
+    Page<Trip> findByIsPublicTrue(Pageable pageable);
 
     @Query("SELECT DISTINCT t FROM Trip t JOIN t.roadmapItems r WHERE r.country.name = :countryName AND t.isPublic = true")
     Page<Trip> findPublicTripsByCountryName(Pageable pageable, @Param("countryName") String name);

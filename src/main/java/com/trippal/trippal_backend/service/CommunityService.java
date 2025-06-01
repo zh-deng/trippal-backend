@@ -20,7 +20,7 @@ public class CommunityService {
 
     public Page<Trip> getPublicTrips(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return tripRepository.findByPublicTrue(pageable);
+        return tripRepository.findByIsPublicTrue(pageable);
     }
 
     public Page<Trip> getPublicTripsByCountry(int page, int size, String countryName) {

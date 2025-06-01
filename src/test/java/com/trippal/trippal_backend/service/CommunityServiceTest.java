@@ -29,7 +29,7 @@ public class CommunityServiceTest {
     private CommunityService communityService;
 
     @Test
-    public void testGetPublicTrips_ReturnsPaginatedTrips() {
+    public void testGetIsPublicTrips_ReturnsPaginatedTrips() {
         int page = 0;
         int size = 2;
         Pageable pageable = PageRequest.of(page, size);
@@ -37,12 +37,12 @@ public class CommunityServiceTest {
         List<Trip> tripList = Arrays.asList(new Trip(), new Trip());
         Page<Trip> tripPage = new PageImpl<>(tripList, pageable, tripList.size());
 
-        Mockito.when(tripRepository.findByPublicTrue(pageable)).thenReturn(tripPage);
+        Mockito.when(tripRepository.findByIsPublicTrue(pageable)).thenReturn(tripPage);
 
         Page<Trip> result = communityService.getPublicTrips(page, size);
 
         assertNotNull(result);
         assertEquals(2, result.getContent().size());
-        Mockito.verify(tripRepository, Mockito.times(1)).findByPublicTrue(pageable);
+        Mockito.verify(tripRepository, Mockito.times(1)).findByIsPublicTrue(pageable);
     }
 }
