@@ -1,6 +1,6 @@
 package com.trippal.trippal_backend.controller;
 
-import com.trippal.trippal_backend.dtos.TripDto;
+import com.trippal.trippal_backend.dtos.TripExtendedDto;
 import com.trippal.trippal_backend.model.Trip;
 import com.trippal.trippal_backend.service.CommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class CommunityController {
     }
 
     @GetMapping
-    public Page<TripDto> getPublicTrips(
+    public Page<TripExtendedDto> getPublicTrips(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size,
             @RequestParam(required = false) String countryName
@@ -30,6 +30,6 @@ public class CommunityController {
         Page<Trip> tripPage = (countryName != null && !countryName.isBlank())
                 ? communityService.getPublicTripsByCountry(page, size, countryName)
                 : communityService.getPublicTrips(page, size);
-        return tripPage.map(TripDto::new);
+        return tripPage.map(TripExtendedDto::new);
     }
 }

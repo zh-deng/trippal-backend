@@ -1,6 +1,6 @@
 package com.trippal.trippal_backend.controller;
 
-import com.trippal.trippal_backend.dtos.TripDto;
+import com.trippal.trippal_backend.dtos.TripExtendedDto;
 import com.trippal.trippal_backend.model.Trip;
 import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.service.CommunityService;
@@ -43,12 +43,12 @@ public class CommunityControllerTest {
         when(communityService.getPublicTrips(page, size))
                 .thenReturn(mockTripPage);
 
-        Page<TripDto> result = communityController.getPublicTrips(page, size, null);
+        Page<TripExtendedDto> result = communityController.getPublicTrips(page, size, null);
 
         // Check if 1 TripDto was returned
         assertEquals(1, result.getContent().size());
         // Check if conversion of Trip to TripDto happened
-        assertInstanceOf(TripDto.class, result.getContent().getFirst());
+        assertInstanceOf(TripExtendedDto.class, result.getContent().getFirst());
 
         // Checks if service was called once
         verify(communityService, times(1)).getPublicTrips(page, size);
