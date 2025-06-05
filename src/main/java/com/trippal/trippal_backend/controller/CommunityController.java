@@ -2,6 +2,7 @@ package com.trippal.trippal_backend.controller;
 
 import com.trippal.trippal_backend.dtos.TripExtendedDto;
 import com.trippal.trippal_backend.model.Trip;
+import com.trippal.trippal_backend.repository.UserInfoRepository;
 import com.trippal.trippal_backend.service.CommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommunityController {
 
     private final CommunityService communityService;
+    private final UserInfoRepository userInfoRepository;
 
     @Autowired
-    public CommunityController(CommunityService communityService) {
+    public CommunityController(CommunityService communityService, UserInfoRepository userInfoRepository) {
         this.communityService = communityService;
+        this.userInfoRepository = userInfoRepository;
     }
 
     @GetMapping
@@ -30,6 +33,6 @@ public class CommunityController {
         Page<Trip> tripPage = (countryName != null && !countryName.isBlank())
                 ? communityService.getPublicTripsByCountry(page, size, countryName)
                 : communityService.getPublicTrips(page, size);
-        return tripPage.map(TripExtendedDto::new);
+        return tripPage.map(trip -> new TripExtendedDto(trip, userInfoRepository));
     }
 }

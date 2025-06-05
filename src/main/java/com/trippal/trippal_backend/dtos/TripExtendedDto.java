@@ -1,6 +1,7 @@
 package com.trippal.trippal_backend.dtos;
 
 import com.trippal.trippal_backend.model.Trip;
+import com.trippal.trippal_backend.repository.UserInfoRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,17 +13,21 @@ public class TripExtendedDto {
     private List<RoadmapItemDto> roadmapItems;
     private Long userId;
     private int stars;
+    private List<TripCommentDto> comments;
 
     public TripExtendedDto() {
     }
 
-    public TripExtendedDto(Trip trip) {
+    public TripExtendedDto(Trip trip, UserInfoRepository userInfoRepository) {
         this.id = trip.getId();
         this.title = trip.getTitle();
         this.isPublic = trip.isPublic();
         this.userId = trip.getUser().getId();
         this.roadmapItems = trip.getRoadmapItems().stream().map(RoadmapItemDto::new).collect(Collectors.toList());
         this.stars = trip.getStars();
+        this.comments = trip.getComments().stream()
+                .map(comment -> new TripCommentDto(comment, userInfoRepository))
+                .collect(Collectors.toList());
     }
 
     public Long getId() {
@@ -67,5 +72,13 @@ public class TripExtendedDto {
 
     public void setStars(int stars) {
         this.stars = stars;
+    }
+
+    public List<TripCommentDto> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<TripCommentDto> comments) {
+        this.comments = comments;
     }
 }

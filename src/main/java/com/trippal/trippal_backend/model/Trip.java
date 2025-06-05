@@ -99,4 +99,9 @@ public class Trip extends BaseEntity {
     public void setComments(List<TripComment> comments) {
         this.comments = comments;
     }
+
+    public void addComment(TripComment tripComment) {
+        comments.add(tripComment);
+        tripComment.setTrip(this);
+    }
 }
