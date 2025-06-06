@@ -53,10 +53,6 @@ public class TripController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TripDto> updateTrip(@RequestBody Trip trip, @PathVariable Long id) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
-
         Trip updatedTrip = tripService.updateTrip(id, trip);
         TripDto tripDto = new TripDto(updatedTrip);
 
@@ -65,9 +61,6 @@ public class TripController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTrip(@PathVariable Long id) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
         boolean deleted = tripService.deleteTrip(id);
 
         if (deleted) {
