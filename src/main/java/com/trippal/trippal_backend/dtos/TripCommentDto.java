@@ -10,7 +10,9 @@ public class TripCommentDto {
     private Long id;
     private String content;
     private String author;
+    private Long authorId;
     private LocalDateTime createdAt;
+    private Long tripId;
 
     public TripCommentDto() {
     }
@@ -21,7 +23,9 @@ public class TripCommentDto {
         this.author = userInfoRepository.findById(tripComment.getAuthorId())
                 .map(UserInfo::getName)
                 .orElse("Unknown");
+        this.authorId = tripComment.getAuthorId();
         this.createdAt = tripComment.getCreatedAt();
+        this.tripId = tripComment.getTrip().getId();
     }
 
     public Long getId() {
@@ -54,5 +58,21 @@ public class TripCommentDto {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Long getTripId() {
+        return tripId;
+    }
+
+    public void setTripId(Long tripId) {
+        this.tripId = tripId;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 }
