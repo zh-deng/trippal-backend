@@ -55,7 +55,7 @@ class RoadmapItemServiceTest {
         roadmapItemDto.setTitle("Visit Eiffel Tower");
         roadmapItemDto.setDate(FIXED_DATE);
         roadmapItemDto.setNotes("Best view at sunset");
-        roadmapItemDto.setCountry(new Country("France", 10.5, 10.5));
+        roadmapItemDto.setCountry(new Country("France", 10.5, 10.5, "FR"));
         roadmapItemDto.setCity(new City("Paris", 11.5, 11.5));
         roadmapItemDto.setAttraction(new Attraction("Eiffel Tower", 12.5, 12.5));
 

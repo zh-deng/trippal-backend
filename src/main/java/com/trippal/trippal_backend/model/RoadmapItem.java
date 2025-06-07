@@ -26,12 +26,28 @@ public class RoadmapItem extends BaseEntity {
     private List<UploadedFile> files = new ArrayList<>();
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "name", column = @Column(name = "country_name")),
+            @AttributeOverride(name = "latitude", column = @Column(name = "country_latitude")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "country_longitude")),
+            @AttributeOverride(name = "countryCode", column = @Column(name = "country_code"))
+    })
     private Country country;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "name", column = @Column(name = "city_name")),
+            @AttributeOverride(name = "latitude", column = @Column(name = "city_latitude")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "city_longitude"))
+    })
     private City city;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "name", column = @Column(name = "attraction_name")),
+            @AttributeOverride(name = "latitude", column = @Column(name = "attraction_latitude")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "attraction_longitude"))
+    })
     private Attraction attraction;
 
     @ManyToOne
