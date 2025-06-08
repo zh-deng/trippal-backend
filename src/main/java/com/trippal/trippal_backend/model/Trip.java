@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Trip extends BaseEntity {
@@ -32,8 +34,8 @@ public class Trip extends BaseEntity {
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TripComment> comments = new ArrayList<>();
 
-    @Column
-    private int stars = 0;
+    @ManyToMany(mappedBy = "starredTrips")
+    private Set<UserInfo> starredByUsers = new HashSet<>();
 
     public Trip() {
     }
@@ -84,14 +86,6 @@ public class Trip extends BaseEntity {
         roadmapItem.setTrip(this);
     }
 
-    public int getStars() {
-        return stars;
-    }
-
-    public void setStars(int stars) {
-        this.stars = stars;
-    }
-
     public List<TripComment> getComments() {
         return comments;
     }
@@ -103,5 +97,17 @@ public class Trip extends BaseEntity {
     public void addComment(TripComment tripComment) {
         comments.add(tripComment);
         tripComment.setTrip(this);
+    }
+
+    public Set<UserInfo> getStarredByUsers() {
+        return starredByUsers;
+    }
+
+    public void setStarredByUsers(Set<UserInfo> starredByUsers) {
+        this.starredByUsers = starredByUsers;
+    }
+
+    public int getStars() {
+        return starredByUsers.size();
     }
 }

@@ -3,7 +3,9 @@ package com.trippal.trippal_backend.model;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class UserInfo extends BaseEntity {
@@ -22,6 +24,14 @@ public class UserInfo extends BaseEntity {
     @OneToMany(mappedBy = "userInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("createdAt ASC")
     private List<Trip> trips = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_starred_trips",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "trip_id")
+    )
+    private Set<Trip> starredTrips = new HashSet<>();
 
     public UserInfo() {
     }
@@ -76,5 +86,13 @@ public class UserInfo extends BaseEntity {
     public void addTrip(Trip trip) {
         trips.add(trip);
         trip.setUser(this);
+    }
+
+    public Set<Trip> getStarredTrips() {
+        return starredTrips;
+    }
+
+    public void setStarredTrips(Set<Trip> starredTrips) {
+        this.starredTrips = starredTrips;
     }
 }
