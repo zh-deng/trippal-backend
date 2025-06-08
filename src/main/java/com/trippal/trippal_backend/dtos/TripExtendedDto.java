@@ -1,6 +1,7 @@
 package com.trippal.trippal_backend.dtos;
 
 import com.trippal.trippal_backend.model.Trip;
+import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.repository.UserInfoRepository;
 
 import java.util.List;
@@ -14,11 +15,12 @@ public class TripExtendedDto {
     private Long userId;
     private int stars;
     private List<TripCommentDto> comments;
+    private boolean isStarredByCurrentUser;
 
     public TripExtendedDto() {
     }
 
-    public TripExtendedDto(Trip trip, UserInfoRepository userInfoRepository) {
+    public TripExtendedDto(Trip trip, UserInfoRepository userInfoRepository, UserInfo currentUser) {
         this.id = trip.getId();
         this.title = trip.getTitle();
         this.isPublic = trip.isPublic();
@@ -28,6 +30,7 @@ public class TripExtendedDto {
         this.comments = trip.getComments().stream()
                 .map(comment -> new TripCommentDto(comment, userInfoRepository))
                 .collect(Collectors.toList());
+        this.isStarredByCurrentUser = currentUser != null && trip.getStarredByUsers().contains(currentUser);
     }
 
     public Long getId() {
@@ -80,5 +83,13 @@ public class TripExtendedDto {
 
     public void setComments(List<TripCommentDto> comments) {
         this.comments = comments;
+    }
+
+    public boolean isStarredByCurrentUser() {
+        return isStarredByCurrentUser;
+    }
+
+    public void setStarredByCurrentUser(boolean starredByCurrentUser) {
+        isStarredByCurrentUser = starredByCurrentUser;
     }
 }

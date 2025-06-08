@@ -224,19 +224,16 @@ public class DataSeeder implements CommandLineRunner {
                     new Attraction("Forbidden City", 10.5, 10.5), trip15);
             trip15.addRoadmapItem(roadmapItem15_2);
 
-            trip1.setStars(4);
             TripComment tripComment1_1 = new TripComment("Some locations were a bit underwhelming.", 1L, trip1);
             TripComment tripComment1_2 = new TripComment("Not what I expected, but it was interesting.", 1L, trip1);
             trip1.addComment(tripComment1_1);
             trip1.addComment(tripComment1_2);
 
-            trip2.setStars(1);
             TripComment tripComment2_1 = new TripComment("Could have been better, but still enjoyed parts of it.", 1L, trip2);
             TripComment tripComment2_2 = new TripComment("The itinerary was well planned and exciting.", 1L, trip2);
             trip2.addComment(tripComment2_1);
             trip2.addComment(tripComment2_2);
 
-            trip3.setStars(56);
             TripComment tripComment3_1 = new TripComment("Amazing experience, would love to go again!", 1L, trip3);
             TripComment tripComment3_2 = new TripComment("Truly breathtaking views and culture.", 1L, trip3);
             TripComment tripComment3_3 = new TripComment("Some locations were a bit underwhelming.", 1L, trip3);
@@ -248,21 +245,17 @@ public class DataSeeder implements CommandLineRunner {
             trip3.addComment(tripComment3_4);
             trip3.addComment(tripComment3_5);
 
-            trip4.setStars(0);
             TripComment tripComment4_1 = new TripComment("Truly breathtaking views and culture.", 1L, trip4);
             TripComment tripComment4_2 = new TripComment("Could have been better, but still enjoyed parts of it.", 1L, trip4);
             trip4.addComment(tripComment4_1);
             trip4.addComment(tripComment4_2);
 
-            trip5.setStars(5);
             TripComment tripComment5_1 = new TripComment("Could have been better, but still enjoyed parts of it.", 1L, trip5);
             trip5.addComment(tripComment5_1);
 
-            trip6.setStars(2);
             TripComment tripComment6_1 = new TripComment("Some locations were a bit underwhelming.", 1L, trip6);
             trip6.addComment(tripComment6_1);
 
-            trip7.setStars(76);
             TripComment tripComment7_1 = new TripComment("Some locations were a bit underwhelming.", 1L, trip7);
             TripComment tripComment7_2 = new TripComment("A few hiccups but still memorable.", 1L, trip7);
             TripComment tripComment7_3 = new TripComment("Could have been better, but still enjoyed parts of it.", 1L, trip7);
@@ -272,7 +265,6 @@ public class DataSeeder implements CommandLineRunner {
             trip7.addComment(tripComment7_3);
             trip7.addComment(tripComment7_4);
 
-            trip8.setStars(1);
             TripComment tripComment8_1 = new TripComment("Not what I expected, but it was interesting.", 1L, trip8);
             TripComment tripComment8_2 = new TripComment("Not what I expected, but it was interesting.", 1L, trip8);
             TripComment tripComment8_3 = new TripComment("Some locations were a bit underwhelming.", 1L, trip8);
@@ -280,7 +272,6 @@ public class DataSeeder implements CommandLineRunner {
             trip8.addComment(tripComment8_2);
             trip8.addComment(tripComment8_3);
 
-            trip9.setStars(43);
             TripComment tripComment9_1 = new TripComment("Had a great time exploring with this plan.", 1L, trip9);
             TripComment tripComment9_2 = new TripComment("Some locations were a bit underwhelming.", 1L, trip9);
             TripComment tripComment9_3 = new TripComment("The itinerary was well planned and exciting.", 1L, trip9);
@@ -290,13 +281,11 @@ public class DataSeeder implements CommandLineRunner {
             trip9.addComment(tripComment9_3);
             trip9.addComment(tripComment9_4);
 
-            trip10.setStars(3);
             TripComment tripComment10_1 = new TripComment("Not what I expected, but it was interesting.", 1L, trip10);
             TripComment tripComment10_2 = new TripComment("Could have been better, but still enjoyed parts of it.", 1L, trip10);
             trip10.addComment(tripComment10_1);
             trip10.addComment(tripComment10_2);
 
-            trip11.setStars(2);
             TripComment tripComment11_1 = new TripComment("Had a great time exploring with this plan.", 1L, trip11);
             TripComment tripComment11_2 = new TripComment("Pretty good overall, had some minor issues.", 1L, trip11);
             TripComment tripComment11_3 = new TripComment("Pretty good overall, had some minor issues.", 1L, trip11);
@@ -306,7 +295,6 @@ public class DataSeeder implements CommandLineRunner {
             trip11.addComment(tripComment11_3);
             trip11.addComment(tripComment11_4);
 
-            trip12.setStars(1);
             TripComment tripComment12_1 = new TripComment("Not what I expected, but it was interesting.", 1L, trip12);
             TripComment tripComment12_2 = new TripComment("Some locations were a bit underwhelming.", 1L, trip12);
             TripComment tripComment12_3 = new TripComment("Pretty good overall, had some minor issues.", 1L, trip12);
@@ -316,7 +304,6 @@ public class DataSeeder implements CommandLineRunner {
             trip12.addComment(tripComment12_3);
             trip12.addComment(tripComment12_4);
 
-            trip13.setStars(4);
             TripComment tripComment13_1 = new TripComment("A few hiccups but still memorable.", 1L, trip13);
             TripComment tripComment13_2 = new TripComment("A must-visit! Unforgettable journey.", 1L, trip13);
             TripComment tripComment13_3 = new TripComment("Could have been better, but still enjoyed parts of it.", 1L, trip13);
@@ -324,13 +311,11 @@ public class DataSeeder implements CommandLineRunner {
             trip13.addComment(tripComment13_2);
             trip13.addComment(tripComment13_3);
 
-            trip14.setStars(0);
             TripComment tripComment14_1 = new TripComment("Pretty good overall, had some minor issues.", 1L, trip14);
             TripComment tripComment14_2 = new TripComment("A must-visit! Unforgettable journey.", 1L, trip14);
             trip14.addComment(tripComment14_1);
             trip14.addComment(tripComment14_2);
 
-            trip15.setStars(3);
             TripComment tripComment15_1 = new TripComment("Some locations were a bit underwhelming.", 1L, trip15);
             TripComment tripComment15_2 = new TripComment("Some locations were a bit underwhelming.", 1L, trip15);
             TripComment tripComment15_3 = new TripComment("Amazing experience, would love to go again!", 1L, trip15);
