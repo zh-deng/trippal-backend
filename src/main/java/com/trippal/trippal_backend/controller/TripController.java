@@ -69,4 +69,24 @@ public class TripController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+
+    // Star a trip
+    @PutMapping("/{id}/star")
+    public ResponseEntity<?> starTrip(@PathVariable Long id) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
+
+        tripService.starTrip(id, user);
+        return ResponseEntity.ok().build();
+    }
+
+    // Unstar a trip
+    @PutMapping("/{id}/unstar")
+    public ResponseEntity<?> unstarTrip(@PathVariable Long id) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
+
+        tripService.unstarTrip(id, user);
+        return ResponseEntity.ok().build();
+    }
 }

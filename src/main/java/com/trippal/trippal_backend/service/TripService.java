@@ -1,8 +1,11 @@
 package com.trippal.trippal_backend.service;
 
 import com.trippal.trippal_backend.model.Trip;
+import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.repository.TripRepository;
+import com.trippal.trippal_backend.repository.UserInfoRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +15,12 @@ import java.util.Optional;
 public class TripService {
 
     private final TripRepository tripRepository;
+    private final UserInfoRepository userInfoRepository;
 
     @Autowired
-    public TripService(TripRepository tripRepository) {
+    public TripService(TripRepository tripRepository, UserInfoRepository userInfoRepository) {
         this.tripRepository = tripRepository;
+        this.userInfoRepository = userInfoRepository;
     }
 
     public Trip getTripById(Long id) {
@@ -50,5 +55,33 @@ public class TripService {
             return true;
         }
         return false;
+    }
+
+    @Transactional
+    public void starTrip(Long tripId, UserInfo user) {
+        Trip trip = tripRepository.findById(tripId)
+                .orElseThrow(() -> new EntityNotFoundException("Trip not found"));
+
+        if (!user.getStarredTrips().contains(trip)) {
+            user.getStarredTrips().add(trip);
+            trip.getStarredByUsers().add(user);
+
+            userInfoRepository.save(user);
+            tripRepository.save(trip);
+        }
+    }
+
+    @Transactional
+    public void unstarTrip(Long tripId, UserInfo user) {
+        Trip trip = tripRepository.findById(tripId)
+                .orElseThrow(() -> new EntityNotFoundException("Trip not found"));
+
+        if (user.getStarredTrips().contains(trip)) {
+            user.getStarredTrips().remove(trip);
+            trip.getStarredByUsers().remove(user);
+
+            userInfoRepository.save(user);
+            tripRepository.save(trip);
+        }
     }
 }
