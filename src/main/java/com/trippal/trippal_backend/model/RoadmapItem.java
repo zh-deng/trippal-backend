@@ -140,4 +140,9 @@ public class RoadmapItem extends BaseEntity {
     public void setFiles(List<UploadedFile> files) {
         this.files = files;
     }
+
+    public void addFile(UploadedFile uploadedFile) {
+        files.add(uploadedFile);
+        uploadedFile.setRoadmapItem(this);
+    }
 }
