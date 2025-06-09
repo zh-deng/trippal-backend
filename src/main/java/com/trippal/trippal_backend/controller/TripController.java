@@ -89,4 +89,16 @@ public class TripController {
         tripService.unstarTrip(id, user);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/{id}/copy")
+    public ResponseEntity<TripDto> saveSharedTrip(@PathVariable Long id) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
+
+        Trip sharedTrip = tripService.saveSharedTrip(id, user);
+        TripDto sharedTripDto = new TripDto(sharedTrip);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(sharedTripDto);
+    }
 }
