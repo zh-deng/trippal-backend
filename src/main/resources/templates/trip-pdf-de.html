@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Trip Summary</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .trip-title { color: #2c3e50; font-size: 24px; }
+        .section { margin-bottom: 20px; }
+        .section-title { background-color: #f2f2f2; padding: 5px; font-weight: bold; }
+        .itinerary-table { width: 100%; border-collapse: collapse; }
+        .itinerary-table th, .itinerary-table td { border: 1px solid #ddd; padding: 8px; }
+        .itinerary-table th { background-color: #f2f2f2; }
+        .footer { margin-top: 30px; font-size: 12px; text-align: center; }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1 class="trip-title">Reise Zusammenfassung: <span th:text="${trip.title}"></span></h1>
+    <p>Generiert am: <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy')}"></span></p>
+</div>
+
+<!--<div class="section">-->
+<!--    <div class="section-title">Trip Details</div>-->
+<!--    <p><strong>Destination:</strong> <span th:text="${trip.destination}"></span></p>-->
+<!--    <p><strong>Dates:</strong>-->
+<!--        <span th:text="${#dates.format(trip.startDate, 'MMM dd, yyyy')}"></span> - -->
+<!--        <span th:text="${#dates.format(trip.endDate, 'MMM dd, yyyy')}"></span>-->
+<!--    </p>-->
+<!--    <p><strong>Participants:</strong> <span th:text="${trip.participants}"></span></p>-->
+<!--</div>-->
+
+<!--<div class="section">-->
+<!--    <div class="section-title">Itinerary</div>-->
+<!--    <table class="itinerary-table">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>Date</th>-->
+<!--            <th>Activity</th>-->
+<!--            <th>Location</th>-->
+<!--            <th>Time</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr th:each="activity : ${trip.itinerary}">-->
+<!--            <td th:text="${#dates.format(activity.date, 'MMM dd')}"></td>-->
+<!--            <td th:text="${activity.name}"></td>-->
+<!--            <td th:text="${activity.location}"></td>-->
+<!--            <td th:text="${activity.time}"></td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
+<!--</div>-->
+
+<!--<div class="section" th:if="${not #lists.isEmpty(trip.notes)}">-->
+<!--    <div class="section-title">Additional Notes</div>-->
+<!--    <ul>-->
+<!--        <li th:each="note : ${trip.notes}" th:text="${note}"></li>-->
+<!--    </ul>-->
+<!--</div>-->
+
+<div class="footer">
+    <p>Thank you for using our trip planning service!</p>
+</div>
+</body>
+</html>
