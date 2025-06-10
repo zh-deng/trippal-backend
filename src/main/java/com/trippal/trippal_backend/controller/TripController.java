@@ -4,10 +4,15 @@ import com.trippal.trippal_backend.dtos.RoadmapItemPreviewDto;
 import com.trippal.trippal_backend.dtos.TripDto;
 import com.trippal.trippal_backend.model.Trip;
 import com.trippal.trippal_backend.model.UserInfo;
+import com.trippal.trippal_backend.service.PdfGenerationService;
 import com.trippal.trippal_backend.service.TripService;
 import com.trippal.trippal_backend.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,11 +27,13 @@ public class TripController {
 
     private final TripService tripService;
     private final UserInfoService userInfoService;
+    private final PdfGenerationService pdfGenerationService;
 
     @Autowired
-    public TripController(TripService tripService, UserInfoService userInfoService) {
+    public TripController(TripService tripService, UserInfoService userInfoService, PdfGenerationService pdfGenerationService) {
         this.tripService = tripService;
         this.userInfoService = userInfoService;
+        this.pdfGenerationService = pdfGenerationService;
     }
 
     @GetMapping("/{id}/roadmapList")
@@ -100,5 +107,19 @@ public class TripController {
         TripDto sharedTripDto = new TripDto(sharedTrip);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(sharedTripDto);
+    }
+
+    // Generate Pdf of trip
+    @GetMapping("/{id}/download/{language}")
+    public ResponseEntity<Resource> downloadTripPdf(@PathVariable Long id, @PathVariable String language) {
+        Trip trip = tripService.getTripById(id);
+        byte[] pdfBytes = pdfGenerationService.generateTripPdf(trip, language);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + trip.getTitle() + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .contentLength(pdfBytes.length)
+                .body(new ByteArrayResource(pdfBytes));
+
     }
 }
