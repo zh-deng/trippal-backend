@@ -37,13 +37,13 @@
         </thead>
         <tbody>
         <tr th:each="roadmapItem : ${trip.roadmapItems}">
-            <td th:text="${#dates.format(roadmapItem.date, 'MMM dd')}"></td>
+            <td th:text="${roadmapItem.date != null ? #dates.format(roadmapItem.date, 'MMM dd') : ''}"></td>
             <td th:text="${roadmapItem.title}"></td>
-            <td th:text="${roadmapItem.country.name}"></td>
-            <td th:text="${roadmapItem.city.name}"></td>
-            <td th:text="${roadmapItem.attraction.name}"></td>
+            <td th:text="${roadmapItem.country != null ? roadmapItem.country.name : ''}"></td>
+            <td th:text="${roadmapItem.city != null ? roadmapItem.city.name : ''}"></td>
+            <td th:text="${roadmapItem.attraction != null ? roadmapItem.attraction.name : ''}"></td>
             <td th:text="${roadmapItem.notes}"></td>
-            <td th:text="${roadmapItem.files.size()}"></td>
+            <td th:text="${roadmapItem.files != null ? roadmapItem.files.size() : 0}"></td>
         </tr>
         </tbody>
     </table>
