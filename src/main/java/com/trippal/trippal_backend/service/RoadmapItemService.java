@@ -98,4 +98,10 @@ public class RoadmapItemService {
         }
         return false;
     }
+
+    public List<String> getFilterCountries() {
+        return roadmapItemRepository.findDistinctCountryNamesByPublicTrips();
+    }
+
+    ;
 }

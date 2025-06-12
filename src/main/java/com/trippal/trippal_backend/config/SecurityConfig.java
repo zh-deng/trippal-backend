@@ -53,7 +53,7 @@ public class SecurityConfig {
                 // Configure endpoint authorization
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
-                        .requestMatchers("/api/createUser", "/api/login", "/api/community").permitAll()
+                        .requestMatchers("/api/createUser", "/api/login", "/api/community", "/api/roadmapItem/countries").permitAll()
 
                         // All other endpoints require authentication
                         .anyRequest().authenticated()

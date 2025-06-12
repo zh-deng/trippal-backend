@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/roadmapItem")
 public class RoadmapItemController {
@@ -52,5 +54,12 @@ public class RoadmapItemController {
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+    }
+
+    // Returns all countries that are related to public trips for filter purposes
+    @GetMapping("/countries")
+    public ResponseEntity<List<String>> getFilterCountries() {
+        List<String> filterCountries = roadmapItemService.getFilterCountries();
+        return ResponseEntity.ok(filterCountries);
     }
 }
