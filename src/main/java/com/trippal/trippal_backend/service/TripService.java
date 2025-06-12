@@ -60,6 +60,32 @@ public class TripService {
         return false;
     }
 
+    public void publishTrip(Long id) {
+        Optional<Trip> existingTripOpt = tripRepository.findById(id);
+
+        if (existingTripOpt.isPresent()) {
+            Trip existingTrip = existingTripOpt.get();
+            existingTrip.setPublic(true);
+
+            tripRepository.save(existingTrip);
+        } else {
+            throw new EntityNotFoundException("Trip not found with id: " + id);
+        }
+    }
+
+    public void unpublishTrip(Long id) {
+        Optional<Trip> existingTripOpt = tripRepository.findById(id);
+
+        if (existingTripOpt.isPresent()) {
+            Trip existingTrip = existingTripOpt.get();
+            existingTrip.setPublic(false);
+
+            tripRepository.save(existingTrip);
+        } else {
+            throw new EntityNotFoundException("Trip not found with id: " + id);
+        }
+    }
+
     @Transactional
     public void starTrip(Long tripId, UserInfo user) {
         Trip trip = tripRepository.findById(tripId)

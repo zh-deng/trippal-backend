@@ -77,7 +77,20 @@ public class TripController {
         }
     }
 
-    // Star a trip
+    @PutMapping("/{id}/publish")
+    public ResponseEntity<?> publishTrip(@PathVariable Long id) {
+        tripService.publishTrip(id);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}/unpublish")
+    public ResponseEntity<?> unpublishTrip(@PathVariable Long id) {
+        tripService.unpublishTrip(id);
+
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("/{id}/star")
     public ResponseEntity<?> starTrip(@PathVariable Long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -87,7 +100,6 @@ public class TripController {
         return ResponseEntity.ok().build();
     }
 
-    // Unstar a trip
     @PutMapping("/{id}/unstar")
     public ResponseEntity<?> unstarTrip(@PathVariable Long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
