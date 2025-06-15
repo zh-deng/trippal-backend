@@ -29,6 +29,7 @@ public class Trip extends BaseEntity {
     private UserInfo userInfo;
 
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderColumn(name = "position")
     private List<RoadmapItem> roadmapItems = new ArrayList<>();
 
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)

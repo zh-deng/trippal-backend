@@ -54,6 +54,9 @@ public class RoadmapItem extends BaseEntity {
     @JoinColumn(name = "trip_id", nullable = false)
     private Trip trip;
 
+    @Column(name = "position")
+    private Integer position;
+
     public RoadmapItem() {
     }
 
@@ -144,5 +147,13 @@ public class RoadmapItem extends BaseEntity {
     public void addFile(UploadedFile uploadedFile) {
         files.add(uploadedFile);
         uploadedFile.setRoadmapItem(this);
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
     }
 }
