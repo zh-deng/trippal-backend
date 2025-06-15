@@ -37,20 +37,9 @@ public class TripController {
         this.pdfGenerationService = pdfGenerationService;
     }
 
-    @GetMapping("/{id}/roadmapList")
-    public ResponseEntity<List<RoadmapItemPreviewDto>> getRoadmapList(@PathVariable Long id) {
-        Trip existingTrip = tripService.getTripById(id);
-        List<RoadmapItemPreviewDto> roadmapItemPreviewDtos = existingTrip.getRoadmapItems().stream()
-                .map(RoadmapItemPreviewDto::new)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(roadmapItemPreviewDtos);
-    }
-
     @PostMapping
     public ResponseEntity<TripDto> createTrip(@RequestBody Trip trip) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
 
         Trip createdTrip = tripService.createTrip(new Trip(trip.getTitle(), user));
@@ -59,12 +48,23 @@ public class TripController {
         return ResponseEntity.status(HttpStatus.CREATED).body(tripDto);
     }
 
+    @GetMapping("/{id}/roadmapList")
+    public ResponseEntity<List<RoadmapItemPreviewDto>> getRoadmapList(@PathVariable Long id) {
+        Trip existingTrip = tripService.getTripById(id);
+
+        List<RoadmapItemPreviewDto> roadmapItemPreviewDtos = existingTrip.getRoadmapItems().stream()
+                .map(RoadmapItemPreviewDto::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(roadmapItemPreviewDtos);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<TripDto> updateTrip(@RequestBody Trip trip, @PathVariable Long id) {
         Trip updatedTrip = tripService.updateTrip(id, trip);
         TripDto tripDto = new TripDto(updatedTrip);
 
-        return ResponseEntity.status(HttpStatus.OK).body(tripDto);
+        return ResponseEntity.ok(tripDto);
     }
 
     @DeleteMapping("/{id}")
@@ -74,55 +74,33 @@ public class TripController {
         if (deleted) {
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
-    @PutMapping("/{id}/publish")
-    public ResponseEntity<Void> publishTrip(@PathVariable Long id) {
-        tripService.publishTrip(id);
+    @PutMapping("/{id}/publish/toggle")
+    public ResponseEntity<Void> togglePublishStatus(@PathVariable Long id) {
+        tripService.togglePublishStatus(id);
 
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}/unpublish")
-    public ResponseEntity<Void> unpublishTrip(@PathVariable Long id) {
-        tripService.unpublishTrip(id);
+    @PutMapping("/{id}/star/toggle")
+    public ResponseEntity<Void> toggleStarStatus(@PathVariable Long id) {
+        tripService.toggleStarStatus(id);
 
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("/{id}/star")
-    public ResponseEntity<Void> starTrip(@PathVariable Long id) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
-
-        tripService.starTrip(id, user);
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("/{id}/unstar")
-    public ResponseEntity<Void> unstarTrip(@PathVariable Long id) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
-
-        tripService.unstarTrip(id, user);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{id}/copy")
     public ResponseEntity<TripDto> saveSharedTrip(@PathVariable Long id) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
-
-        Trip sharedTrip = tripService.saveSharedTrip(id, user);
+        Trip sharedTrip = tripService.saveSharedTrip(id);
         TripDto sharedTripDto = new TripDto(sharedTrip);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(sharedTripDto);
     }
 
-    // Generate Pdf of trip
+    // Generates a pdf with trip information
     @GetMapping("/{id}/download/{language}")
     public ResponseEntity<Resource> downloadTripPdf(@PathVariable Long id, @PathVariable String language) {
         Trip trip = tripService.getTripById(id);
@@ -142,6 +120,7 @@ public class TripController {
             @RequestBody RoadmapReorderRequestDto request
     ) {
         tripService.reorderRoadmapItems(id, request.getRoadmapItemIds());
+
         return ResponseEntity.ok().build();
     }
 }

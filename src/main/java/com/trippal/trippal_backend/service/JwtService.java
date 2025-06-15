@@ -51,6 +51,7 @@ public class JwtService {
 
     private Key getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
+
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -81,6 +82,7 @@ public class JwtService {
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
+
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }

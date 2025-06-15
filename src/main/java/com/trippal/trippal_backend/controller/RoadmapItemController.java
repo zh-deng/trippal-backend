@@ -26,7 +26,7 @@ public class RoadmapItemController {
         RoadmapItem createdRoadmapItem = roadmapItemService.createRoadmapItem(item);
         RoadmapItemDto roadmapItemDto = new RoadmapItemDto(createdRoadmapItem);
 
-        return ResponseEntity.ok(roadmapItemDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(roadmapItemDto);
     }
 
     @GetMapping("/{id}")
@@ -52,7 +52,7 @@ public class RoadmapItemController {
         if (deleted) {
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 

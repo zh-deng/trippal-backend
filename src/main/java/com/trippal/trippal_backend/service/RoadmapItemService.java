@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -93,12 +92,13 @@ public class RoadmapItemService {
         return roadmapItemRepository.save(existingItem);
     }
 
+    @Transactional
     public boolean deleteRoadmapItem(Long id) {
-        Optional<RoadmapItem> roadmapItemOpt = roadmapItemRepository.findById(id);
-        if (roadmapItemOpt.isPresent()) {
+        if (roadmapItemRepository.existsById(id)) {
             roadmapItemRepository.deleteById(id);
             return true;
         }
+
         return false;
     }
 

@@ -5,10 +5,9 @@ import com.trippal.trippal_backend.model.Trip;
 import com.trippal.trippal_backend.model.TripComment;
 import com.trippal.trippal_backend.repository.TripCommentRepository;
 import com.trippal.trippal_backend.repository.TripRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class TripCommentService {
@@ -22,6 +21,7 @@ public class TripCommentService {
         this.tripRepository = tripRepository;
     }
 
+    @Transactional
     public TripComment createTripComment(TripCommentDto tripCommentDto) {
         Trip trip = tripRepository.findById(tripCommentDto.getTripId()).orElseThrow(() -> new RuntimeException("Trip not found"));
 
@@ -30,12 +30,13 @@ public class TripCommentService {
         return tripCommentRepository.save(tripComment);
     }
 
+    @Transactional
     public boolean deleteTripComment(Long id) {
-        Optional<TripComment> tripCommentOpt = tripCommentRepository.findById(id);
-        if (tripCommentOpt.isPresent()) {
+        if (tripCommentRepository.existsById(id)) {
             tripCommentRepository.deleteById(id);
             return true;
         }
+
         return false;
     }
 }

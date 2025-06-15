@@ -1,6 +1,7 @@
 package com.trippal.trippal_backend.service;
 
 import com.trippal.trippal_backend.model.Trip;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -13,6 +14,7 @@ public class PdfGenerationService {
 
     private final TemplateEngine templateEngine;
 
+    @Autowired
     public PdfGenerationService(TemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
     }

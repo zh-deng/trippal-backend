@@ -36,6 +36,7 @@ public class UserController {
     @PostMapping("/createUser")
     public ResponseEntity<UserInfoDto> createUser(@RequestBody UserInfo userInfo) {
         UserInfoDto savedUser = userInfoService.createUser(userInfo);
+
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
@@ -82,6 +83,7 @@ public class UserController {
         cookie.setMaxAge(0);
 
         response.addCookie(cookie);
+
         return ResponseEntity.ok("Logged out successfully");
     }
 }

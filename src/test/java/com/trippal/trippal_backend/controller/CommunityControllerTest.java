@@ -43,7 +43,7 @@ public class CommunityControllerTest {
         when(communityService.getPublicTrips(page, size))
                 .thenReturn(mockTripPage);
 
-        Page<TripExtendedDto> result = communityController.getPublicTrips(page, size, null, user);
+        Page<TripExtendedDto> result = communityController.getPublicTrips(page, size, null);
 
         // Check if 1 TripDto was returned
         assertEquals(1, result.getContent().size());

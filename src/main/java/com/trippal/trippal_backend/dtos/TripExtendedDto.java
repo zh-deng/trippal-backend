@@ -5,6 +5,7 @@ import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.repository.UserInfoRepository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class TripExtendedDto {
@@ -25,12 +26,16 @@ public class TripExtendedDto {
         this.title = trip.getTitle();
         this.isPublic = trip.isPublic();
         this.userId = trip.getUser().getId();
-        this.roadmapItems = trip.getRoadmapItems().stream().map(RoadmapItemDto::new).collect(Collectors.toList());
+        this.roadmapItems = trip.getRoadmapItems().stream()
+                .filter(Objects::nonNull)
+                .map(RoadmapItemDto::new).collect(Collectors.toList());
         this.stars = trip.getStars();
         this.comments = trip.getComments().stream()
                 .map(comment -> new TripCommentDto(comment, userInfoRepository))
                 .collect(Collectors.toList());
-        this.isStarredByCurrentUser = currentUser != null && trip.getStarredByUsers().contains(currentUser);
+        this.isStarredByCurrentUser = currentUser != null && trip.getStarredByUsers().stream()
+                .anyMatch(u -> u.getId().equals(currentUser.getId()));
+        ;
     }
 
     public Long getId() {

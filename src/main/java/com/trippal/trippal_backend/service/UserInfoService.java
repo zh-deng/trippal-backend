@@ -7,6 +7,7 @@ import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.repository.UserInfoRepository;
 import com.trippal.trippal_backend.security.UserInfoDetails;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +24,7 @@ public class UserInfoService implements UserDetailsService {
     private final UserInfoRepository userInfoRepository;
     private final PasswordEncoder encoder;
 
+    @Autowired
     public UserInfoService(UserInfoRepository userInfoRepository, PasswordEncoder encoder) {
         this.userInfoRepository = userInfoRepository;
         this.encoder = encoder;
@@ -37,12 +38,8 @@ public class UserInfoService implements UserDetailsService {
     }
 
     public UserInfo findById(Long userId) {
-        Optional<UserInfo> userInfo = userInfoRepository.findById(userId);
-        if (userInfo.isPresent()) {
-            return userInfo.get();
-        } else {
-            throw new RuntimeException("User not found with ID: " + userId);
-        }
+        return userInfoRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
     }
 
     public UserInfoDto createUser(UserInfo userInfo) {
@@ -50,6 +47,7 @@ public class UserInfoService implements UserDetailsService {
             userInfo.setPassword(encoder.encode(userInfo.getPassword()));
 
             UserInfo savedUser = userInfoRepository.save(userInfo);
+
             return new UserInfoDto(savedUser);
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateUserException("Email or username already exists");

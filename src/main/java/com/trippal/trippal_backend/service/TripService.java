@@ -9,12 +9,13 @@ import com.trippal.trippal_backend.util.TripCloner;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -24,12 +25,14 @@ public class TripService {
     private final TripRepository tripRepository;
     private final UserInfoRepository userInfoRepository;
     private final TripCloner tripCloner;
+    private final UserInfoService userInfoService;
 
     @Autowired
-    public TripService(TripRepository tripRepository, UserInfoRepository userInfoRepository, TripCloner tripCloner) {
+    public TripService(TripRepository tripRepository, UserInfoRepository userInfoRepository, TripCloner tripCloner, UserInfoService userInfoService) {
         this.tripRepository = tripRepository;
         this.userInfoRepository = userInfoRepository;
         this.tripCloner = tripCloner;
+        this.userInfoService = userInfoService;
     }
 
     public Trip getTripById(Long id) {
@@ -40,96 +43,68 @@ public class TripService {
         return tripRepository.save(trip);
     }
 
+    @Transactional
     public Trip updateTrip(Long id, Trip updatedTrip) {
-        Optional<Trip> existingTripOpt = tripRepository.findById(id);
+        Trip trip = tripRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Trip not found with id: " + id));
 
-        if (existingTripOpt.isPresent()) {
-            Trip existingTrip = existingTripOpt.get();
+        trip.setTitle(updatedTrip.getTitle());
+        trip.setPublic(updatedTrip.isPublic());
+        trip.getRoadmapItems().clear();
+        trip.getRoadmapItems().addAll(updatedTrip.getRoadmapItems());
 
-            existingTrip.setTitle(updatedTrip.getTitle());
-            existingTrip.setPublic(updatedTrip.isPublic());
-            existingTrip.getRoadmapItems().clear();
-            existingTrip.getRoadmapItems().addAll(updatedTrip.getRoadmapItems());
-
-            return tripRepository.save(existingTrip);
-        } else {
-            throw new EntityNotFoundException("Trip not found with id: " + id);
-        }
-    }
-
-    public boolean deleteTrip(Long id) {
-        Optional<Trip> tripOpt = tripRepository.findById(id);
-        if (tripOpt.isPresent()) {
-            tripRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
-
-    public void publishTrip(Long id) {
-        Optional<Trip> existingTripOpt = tripRepository.findById(id);
-
-        if (existingTripOpt.isPresent()) {
-            Trip existingTrip = existingTripOpt.get();
-            existingTrip.setPublic(true);
-
-            tripRepository.save(existingTrip);
-        } else {
-            throw new EntityNotFoundException("Trip not found with id: " + id);
-        }
-    }
-
-    public void unpublishTrip(Long id) {
-        Optional<Trip> existingTripOpt = tripRepository.findById(id);
-
-        if (existingTripOpt.isPresent()) {
-            Trip existingTrip = existingTripOpt.get();
-            existingTrip.setPublic(false);
-
-            tripRepository.save(existingTrip);
-        } else {
-            throw new EntityNotFoundException("Trip not found with id: " + id);
-        }
+        return tripRepository.save(trip);
     }
 
     @Transactional
-    public void starTrip(Long tripId, UserInfo user) {
+    public boolean deleteTrip(Long id) {
+        if (tripRepository.existsById(id)) {
+            tripRepository.deleteById(id);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Transactional
+    public void togglePublishStatus(Long id) {
+        Trip trip = tripRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Trip not found with id: " + id));
+
+        trip.setPublic(!trip.isPublic());
+    }
+
+    @Transactional
+    public void toggleStarStatus(Long tripId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
+
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new EntityNotFoundException("Trip not found"));
 
         if (!user.getStarredTrips().contains(trip)) {
             user.getStarredTrips().add(trip);
             trip.getStarredByUsers().add(user);
-
-            userInfoRepository.save(user);
-            tripRepository.save(trip);
+        } else {
+            user.getStarredTrips().remove(trip);
+            trip.getStarredByUsers().remove(user);
         }
+
+        userInfoRepository.save(user);
+        tripRepository.save(trip);
     }
 
     @Transactional
-    public void unstarTrip(Long tripId, UserInfo user) {
-        Trip trip = tripRepository.findById(tripId)
-                .orElseThrow(() -> new EntityNotFoundException("Trip not found"));
+    public Trip saveSharedTrip(Long id) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
 
-        if (user.getStarredTrips().contains(trip)) {
-            user.getStarredTrips().remove(trip);
-            trip.getStarredByUsers().remove(user);
+        Trip trip = tripRepository.findById(id).
+                orElseThrow(() -> new EntityNotFoundException("Trip not found"));
 
-            userInfoRepository.save(user);
-            tripRepository.save(trip);
-        }
-    }
+        Trip copiedTrip = tripCloner.deepCopyTrip(trip, user);
 
-    public Trip saveSharedTrip(Long id, UserInfo user) {
-        Optional<Trip> existingTripOpt = tripRepository.findById(id);
-
-        if (existingTripOpt.isPresent()) {
-            Trip copiedTrip = tripCloner.deepCopyTrip(existingTripOpt.get(), user);
-
-            return tripRepository.save(copiedTrip);
-        } else {
-            throw new EntityNotFoundException("Trip not found with id: " + id);
-        }
+        return tripRepository.save(copiedTrip);
     }
 
     @Transactional

@@ -2,6 +2,7 @@ package com.trippal.trippal_backend.security;
 
 
 import com.trippal.trippal_backend.model.UserInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,10 +13,11 @@ import java.util.stream.Collectors;
 
 public class UserInfoDetails implements UserDetails {
 
-    private String username; // username = email
-    private String password;
-    private List<GrantedAuthority> authorities;
+    private final String username; // username = email
+    private final String password;
+    private final List<GrantedAuthority> authorities;
 
+    @Autowired
     public UserInfoDetails(UserInfo userInfo) {
         this.username = userInfo.getEmail(); // Use email as username
         this.password = userInfo.getPassword();
@@ -37,7 +39,7 @@ public class UserInfoDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password; // Return the password field
+        return password;
     }
 
     @Override
