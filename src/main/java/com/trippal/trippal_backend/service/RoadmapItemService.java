@@ -7,6 +7,7 @@ import com.trippal.trippal_backend.model.UploadedFile;
 import com.trippal.trippal_backend.repository.RoadmapItemRepository;
 import com.trippal.trippal_backend.repository.TripRepository;
 import com.trippal.trippal_backend.repository.UploadedFileRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,41 +23,43 @@ public class RoadmapItemService {
     private final RoadmapItemRepository roadmapItemRepository;
     private final TripRepository tripRepository;
     private final UploadedFileRepository uploadedFileRepository;
+    private final EntityManager entityManager;
 
     @Autowired
-    public RoadmapItemService(RoadmapItemRepository roadmapItemRepository, TripRepository tripRepository, UploadedFileRepository uploadedFileRepository) {
+    public RoadmapItemService(RoadmapItemRepository roadmapItemRepository, TripRepository tripRepository, UploadedFileRepository uploadedFileRepository, EntityManager entityManager) {
         this.roadmapItemRepository = roadmapItemRepository;
         this.tripRepository = tripRepository;
         this.uploadedFileRepository = uploadedFileRepository;
+        this.entityManager = entityManager;
     }
 
     public RoadmapItem getRoadmapItemById(Long id) {
         return roadmapItemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Roadmap item not found with id: " + id));
     }
 
-    ;
-
+    @Transactional
     public RoadmapItem createRoadmapItem(RoadmapItemDto roadmapItemDto) {
         Trip trip = tripRepository.findById(roadmapItemDto.getTripId()).orElseThrow(() -> new RuntimeException("Trip not found"));
 
         RoadmapItem roadmapItem = new RoadmapItem(roadmapItemDto, trip);
-
-        RoadmapItem savedItem = roadmapItemRepository.save(roadmapItem);
 
         List<UploadedFile> files = roadmapItemDto.getFiles().stream()
                 .map(fileDto -> {
                     UploadedFile file = new UploadedFile();
                     file.setName(fileDto.getName());
                     file.setUrl(fileDto.getUrl());
-                    file.setRoadmapItem(savedItem);
+                    file.setRoadmapItem(roadmapItem);
                     return file;
                 })
                 .collect(Collectors.toList());
 
-        uploadedFileRepository.saveAll(files);
-        savedItem.setFiles(files);
+        roadmapItem.setFiles(files);
 
-        return savedItem;
+        trip.addRoadmapItem(roadmapItem);
+        tripRepository.save(trip);
+        entityManager.flush();
+
+        return roadmapItemRepository.findTopByTripOrderByPositionDesc(trip);
     }
 
     @Transactional
@@ -102,6 +105,4 @@ public class RoadmapItemService {
     public List<String> getFilterCountries() {
         return roadmapItemRepository.findDistinctCountryNamesByPublicTrips();
     }
-
-    ;
 }

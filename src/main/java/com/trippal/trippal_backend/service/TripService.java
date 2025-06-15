@@ -1,5 +1,6 @@
 package com.trippal.trippal_backend.service;
 
+import com.trippal.trippal_backend.model.RoadmapItem;
 import com.trippal.trippal_backend.model.Trip;
 import com.trippal.trippal_backend.model.UserInfo;
 import com.trippal.trippal_backend.repository.TripRepository;
@@ -10,7 +11,12 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class TripService {
@@ -124,5 +130,30 @@ public class TripService {
         } else {
             throw new EntityNotFoundException("Trip not found with id: " + id);
         }
+    }
+
+    @Transactional
+    public void reorderRoadmapItems(Long tripId, List<Long> newOrderIds) {
+        Trip trip = tripRepository.findById(tripId)
+                .orElseThrow(() -> new EntityNotFoundException("Trip not found"));
+
+        Map<Long, RoadmapItem> itemMap = trip.getRoadmapItems().stream()
+                .collect(Collectors.toMap(RoadmapItem::getId, Function.identity()));
+
+        List<RoadmapItem> reorderedList = new ArrayList<>();
+
+        for (Long id : newOrderIds) {
+            RoadmapItem item = itemMap.get(id);
+            if (item == null) {
+                throw new IllegalArgumentException("RoadmapItem ID " + id + " is not part of this trip.");
+            }
+
+            reorderedList.add(item);
+        }
+
+        trip.getRoadmapItems().clear();
+        trip.getRoadmapItems().addAll(reorderedList);
+
+        tripRepository.save(trip);
     }
 }

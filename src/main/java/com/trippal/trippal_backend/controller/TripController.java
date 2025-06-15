@@ -1,6 +1,7 @@
 package com.trippal.trippal_backend.controller;
 
 import com.trippal.trippal_backend.dtos.RoadmapItemPreviewDto;
+import com.trippal.trippal_backend.dtos.RoadmapReorderRequestDto;
 import com.trippal.trippal_backend.dtos.TripDto;
 import com.trippal.trippal_backend.model.Trip;
 import com.trippal.trippal_backend.model.UserInfo;
@@ -78,21 +79,21 @@ public class TripController {
     }
 
     @PutMapping("/{id}/publish")
-    public ResponseEntity<?> publishTrip(@PathVariable Long id) {
+    public ResponseEntity<Void> publishTrip(@PathVariable Long id) {
         tripService.publishTrip(id);
 
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}/unpublish")
-    public ResponseEntity<?> unpublishTrip(@PathVariable Long id) {
+    public ResponseEntity<Void> unpublishTrip(@PathVariable Long id) {
         tripService.unpublishTrip(id);
 
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}/star")
-    public ResponseEntity<?> starTrip(@PathVariable Long id) {
+    public ResponseEntity<Void> starTrip(@PathVariable Long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
 
@@ -101,7 +102,7 @@ public class TripController {
     }
 
     @PutMapping("/{id}/unstar")
-    public ResponseEntity<?> unstarTrip(@PathVariable Long id) {
+    public ResponseEntity<Void> unstarTrip(@PathVariable Long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserInfo user = userInfoService.getUserByEmail(userDetails.getUsername());
 
@@ -133,5 +134,14 @@ public class TripController {
                 .contentLength(pdfBytes.length)
                 .body(new ByteArrayResource(pdfBytes));
 
+    }
+
+    @PutMapping("{id}/roadmap/reorder")
+    public ResponseEntity<Void> reorderRoadmapItems(
+            @PathVariable Long id,
+            @RequestBody RoadmapReorderRequestDto request
+    ) {
+        tripService.reorderRoadmapItems(id, request.getRoadmapItemIds());
+        return ResponseEntity.ok().build();
     }
 }
